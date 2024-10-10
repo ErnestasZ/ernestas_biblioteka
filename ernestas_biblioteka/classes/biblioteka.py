@@ -46,12 +46,6 @@ class Biblioteka:
         self.books.append(new_book)
         self.__save_lib()
 
-    # def add_consumers(self, consumer: User | Librarian):
-    #     if isinstance(consumer, User):
-    #         self.users.add(consumer)
-    #     if isinstance(consumer, Librarian):
-    #         self.librarian.add(consumer)
-    #     self.__self_lib()
 
     def add_user(self, name: str, birth_year: int) -> User | bool:
         # check year int 4 numbers and > 16
