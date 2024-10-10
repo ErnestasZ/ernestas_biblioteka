@@ -22,7 +22,7 @@ def check_user_for_log(users: list[User], card_num: int) -> User:
         (user for user in users if user.user_card.card_number == str(card_num)), None)
     if not log_user:
         raise ValueError(
-            'Nerasta kortelė arba skaitytojas, iveskite iš naujo!')
+            'Nerasta skaitytojo, iveskite iš naujo!')
     return log_user
 
 
