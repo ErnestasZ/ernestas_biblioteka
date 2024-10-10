@@ -14,9 +14,9 @@ class Biblioteka:
         self.__load_data()
 
     def __load_data(self):
-        if os.path.exists(self.LIB_FILE):
+        if os.path.exists(LIB_FILE):
             try:
-                with open(self.LIB_FILE, 'rb') as file:
+                with open(LIB_FILE, 'rb') as file:
                     data = pickle.load(file)
                 self.books = data.books
                 # self.users = data.users
@@ -26,10 +26,11 @@ class Biblioteka:
 
     def __save_lib(self):
         try:
-            with open(self.LIB_FILE, 'wb') as file:
+            with open(LIB_FILE, 'wb') as file:
                 pickle.dump(self, file)
         except Exception as err:
             print(err)
+        print('Išsaugota sekmingai')
 
     def add_book(self, book: Book):
         self.books.append(book)
