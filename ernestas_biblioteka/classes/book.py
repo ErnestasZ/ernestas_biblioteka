@@ -1,18 +1,13 @@
-from ernestas_biblioteka.constants import GENRES
 from dataclasses import dataclass
-
-
-class InvalidGenreError(Exception):
-    """Kai netinkamas zanras"""
-    pass
+from ernestas_biblioteka.constants import GENRES
+from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
 
 
 @dataclass
 class Book:
     def __init__(self, author: str, name: str, release_year: int, genre: str):
         if genre not in GENRES:
-            raise InvalidGenreError(
-                f"Žanras '{genre}' neegzistuoja. Pasirinkite viena is egzistuojanciu žanrų.")
+            raise InvalidGenreError(genre)
         self.author = author
         self.name = name
         self.release_year = release_year
