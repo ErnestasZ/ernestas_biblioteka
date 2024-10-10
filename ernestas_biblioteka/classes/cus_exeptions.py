@@ -7,4 +7,3 @@ class InvalidGenreError(Exception):
     def __str__(self):
         return f"'{self.genre}': {self.message} Pasirinkite viena is egzistuojanciu žanrų."
 
-
