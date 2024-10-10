@@ -6,3 +6,6 @@ GENRES = ['Detektyvai', 'Fantastika', 'Distopijos ir utopijos', 'Istoriniai roma
           'Biografijos ir autobiografijos', 'Receptų knygos', 'Istorinės knygos', 'Saviugda', 'Meno knygos', 'Kelionių knygos', 'Publicistika ir eseistika', 'Religinės knygos', 'Vaikų auklėjimo ir tėvystės knygos', 'Filosofija', 'Knygos apie sveikatą', 'Populiarioji psichologija', 'Mokslo populiarinimas', 'Verslo knygos']
 
 LIB_FILE = 'ernestas_biblioteka/data/biblioteka_data.pkl'
+CARD_NUM_FILE = 'ernestas_biblioteka/data/card_num_set.pkl'
+
+# CONSUMER_TYPE = ['skaitytojas', 'bibliotekininkas']
