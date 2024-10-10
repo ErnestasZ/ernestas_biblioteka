@@ -4,7 +4,7 @@ import os
 from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
-from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique
+from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log
 
 from ernestas_biblioteka.constants import LIB_FILE
 
@@ -16,6 +16,7 @@ class Biblioteka:
         self.users: list[User] = []
         self.librarians: list[Librarian] = []
         self.__load_data()
+        self.log_consumer: User | Librarian = None
 
     def __load_data(self):
         if os.path.exists(LIB_FILE):
@@ -74,6 +75,27 @@ class Biblioteka:
             return new_librarian
         print(f'Bibliotekininkas tokiu "{name}" vardu egzistuoja')
         return False
+
+    def login_user(self, card_num: int) -> User:
+        # check name > 2
+        # check card_number int, == 8
+        user = check_user_for_log(self.users, card_num)
+        self.log_consumer = user
+        print("prisijungei sėkmingai")
+        return user
+
+    def login_librarian(self, name: str, password: str) -> Librarian:
+        # check name > 2
+        # check password min >=6
+        librarian = check_librarian_for_log(self.librarians, name, password)
+        self.log_consumer = librarian
+        print("prisijungei sėkmingai")
+        return librarian
+
+    def logout(self) -> bool:
+        self.log_consumer = None
+        print('atsijungiai')
+        return True
 
     def __len__(self):
         return len(self.books)

@@ -23,5 +23,11 @@ new_lib = Biblioteka()
 print(new_lib.users)
 print(new_lib.librarians)
 
-for librarian in new_lib.librarians:
-    print(f'{librarian.password}')
+for user in new_lib.users:
+    print(f'{user.user_card.card_number}')
+
+new_lib.login_librarian('Onute', 'seacret123')
+new_lib.login_user('59982692')
+new_lib.logout()
+if new_lib.log_consumer:
+    print(new_lib.log_consumer.name)
