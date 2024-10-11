@@ -3,7 +3,7 @@ import datetime as dt
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.book import Book
-from ernestas_biblioteka.classes.records import LibRecords, UserRecords
+from ernestas_biblioteka.classes.records import LibRecords, UserRecords, Records
 from ernestas_biblioteka.constants import BOOK_OVERDUE_DAYS, MAX_TAKEN_BOOKS
 
 # from __future__ import annotations
@@ -54,3 +54,20 @@ def set_take_book(user: User, book: Book) -> UserRecords:
 
     # create records
     return UserRecords(user, book)
+
+
+def find_taken_book_record(book: Book, records: Records):
+    if not records.user_records or not book.taken_at:
+        raise LookupError('Irašų nerasta.')
+    book_rec = next((user_r for user_r in records.user_records if user_r.book ==
+                    book and user_r.book.taken_at == book.taken_at), None)
+    if not book_rec:
+        raise LookupError('Irašų nerasta.')
+    return book_rec
+
+
+def set_return_book(user_record: UserRecords):
+    user_record.user.return_book(user_record.book)
+    user_record.book.set_return()
+    user_record.return_book()
+    return user_record

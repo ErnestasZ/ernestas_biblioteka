@@ -6,6 +6,7 @@ from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.records import Records
 from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log, set_take_book
+import ernestas_biblioteka.functions.function as fn
 
 from ernestas_biblioteka.constants import LIB_FILE
 
@@ -101,9 +102,8 @@ class Biblioteka:
         return True
 
     def take_book(self, book: Book) -> None:
-        # check if register
-        if self.log_consumer == None or not isinstance(self.log_consumer, User):
-            raise LookupError('Paimti knyga gali prisijunges skaitytojas')
+        # check if login
+        self.__check_login_user()
         # check if book not taken +
         # check if user can take book by count +
         # check if user can take book by is not overdue +
@@ -111,6 +111,27 @@ class Biblioteka:
         self.records.add_record(new_user_record)
         self.__save_lib()
         print("paemete knyga sekmingai")
+
+    def return_book(self, book: Book) -> None:
+        self.__check_login_user()
+        # check if user has this book
+        if book not in self.log_consumer.taken_books:
+            raise LookupError('Neturi sios knygos')
+        # find book records
+        book_records = fn.find_taken_book_record(
+            book, self.records)
+        fn.set_return_book(book_records)
+        # self.records.add_record(new_return_record)
+        self.__save_lib()
+        print("grazinote knyga")
+
+    def __check_login_user(self) -> None:
+        if self.log_consumer == None or not isinstance(self.log_consumer, User):
+            raise LookupError('Turi buti prisijunges skaitytojas')
+
+    def __check_login_lib(self) -> None:
+        if self.log_consumer == None or not isinstance(self.log_consumer, Librarian):
+            raise LookupError('Turi buti prisijunges bibliotekininkas')
 
     def __len__(self):
         return len(self.books)

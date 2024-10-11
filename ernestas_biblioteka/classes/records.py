@@ -17,10 +17,9 @@ class UserRecords:
     def __init__(self, user: User, book: Book):
         self.user = user
         self.book = book
-        self.type = type
         self.pick_up_date = dt.now()
         self.return_date: dt = None
-    
+
     def return_book(self):
         self.return_date = dt.now()
 
@@ -35,9 +34,3 @@ class Records:
             self.lib_records.append(add_object)
         if isinstance(add_object, UserRecords):
             self.user_records.append(add_object)
-
-
-
-
-
-

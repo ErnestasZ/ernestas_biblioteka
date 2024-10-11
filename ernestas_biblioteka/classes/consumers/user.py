@@ -13,7 +13,7 @@ class User(Consumer):
         self.taken_books.append(book)
 
     def return_book(self, book: Book):
-        self.taken_books.pop(book)
+        self.taken_books.remove(book)
 
     def __str__(self):
         return f'{self.type} - {self.name}, registracija nuo {self.registration_data}, šiuo metu turi paėmęs {len(self)}'

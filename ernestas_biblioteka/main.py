@@ -37,3 +37,7 @@ if new_lib.log_consumer != None:
     print(new_lib.log_consumer.taken_books)
 
 # new_lib.take_book(new_lib.books[-1])
+# new_lib.return_book(new_lib.books[-1])
+
+for rec in new_lib.records.user_records:
+    print(f'{rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
