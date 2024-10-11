@@ -7,8 +7,8 @@ from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.records import Records
 from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log, set_take_book
 import ernestas_biblioteka.functions.function as fn
-
-from ernestas_biblioteka.constants import LIB_FILE
+import ernestas_biblioteka.functions.validation_func as v_fn
+from ernestas_biblioteka.constants import LIB_FILE, USER_MIN_AGE, LIB_MIN_AGE
 
 
 @dataclass
@@ -44,34 +44,37 @@ class Biblioteka:
             print(err)
         print('Išsaugota sekmingai')
 
-    def add_book(self, author: str, name: str, release_year: int, genre: str) -> Book:
-        # new_book = Book(author, name, release_year, genre)
-        # if new_book in self.books:
-        #     raise LookupError('Ši knyga pridėta')
-        try:
-            new_book = Book(author, name, release_year, genre)
-        except Exception as err:
-            print(err)
-            return False
+    def add_book(self, author: str, name: str, release_year: str, genre: str) -> Book:
+        # only register librarian +
+        self.__check_login_lib()
+        # check author non digits only letters > 3 +
+        # check name > 0 +
+        # relese date 4 digits and year <= current year +
+        # genre from Genre List +
+        new_book = fn.create_book(author, name, release_year, genre)
         self.books.append(new_book)
         self.__save_lib()
         return new_book
 
-    def add_user(self, name: str, birth_year: int) -> User | bool:
-        # check year int 4 numbers and > 16
-        # ceck name > 2
+    def add_user(self, name: str, birth_year: str) -> User:
+        # ceck name > 2 +
+        v_fn.validate_name(name)
+        # check year int 4 numbers and > 16 +
+        v_fn.validate_year(birth_year, USER_MIN_AGE)
         if check_is_user_unique(self.users, name):
             new_user = User(name, birth_year)
             self.users.append(new_user)
             self.__save_lib()
             return new_user
-        print(f'Skaitytojas tokiu "{name}" vardu egzistuoja')
-        return False
+        raise LookupError(f'Skaitytojas tokiu "{name}" vardu egzistuoja.')
 
-    def add_librarian(self, name: str, birth_year: int, password: str) -> Librarian | bool:
-        # check year int 4 numbers and > 16
-        # ceck name > 2
-        # check password >=6
+    def add_librarian(self, name: str, birth_year: str, password: str) -> Librarian | bool:
+        # ceck name > 2 +
+        v_fn.validate_name(name)
+        # check birh_year >= 18 +
+        v_fn.validate_year(birth_year, LIB_MIN_AGE)
+        # check password >=6 Ž
+        v_fn.validate_password(password)
         if check_is_librarian_unique(self.librarians, name):
             new_librarian = Librarian(name, birth_year, password)
             self.librarians.append(new_librarian)
@@ -81,16 +84,15 @@ class Biblioteka:
         return False
 
     def login_user(self, card_num: str) -> User:
-        # check name > 2
-        # check card_number int, == 8
+        # check card_number int, == 8 , No need +
         user = check_user_for_log(self.users, card_num)
         self.log_consumer = user
         print("prisijungei sėkmingai")
         return user
 
     def login_librarian(self, name: str, password: str) -> Librarian:
-        # check name > 2
-        # check password min >=6
+        # check name > 2, no need +
+        # check password min >=6 no need +
         librarian = check_librarian_for_log(self.librarians, name, password)
         self.log_consumer = librarian
         print("prisijungei sėkmingai")
