@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from ernestas_biblioteka.constants import GENRES
 from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
+from ernestas_biblioteka.classes.consumers.user import User
 
 
 @dataclass
@@ -12,6 +13,17 @@ class Book:
         self.name = name
         self.release_year = release_year
         self.genre = genre
+        self.taken_by: User = None
+        self.is_active: bool = True
+
+    def set_taken(self, user: User):
+        self.taken_by = user
+
+    def set_return(self):
+        self.taken_by = None
+
+    def set_remove(self):
+        self.is_active = False
 
     def __str__(self) -> str:
         return f'"{self.name}" - {self.author}, išleista {self.release_year}m. ({self.genre})'

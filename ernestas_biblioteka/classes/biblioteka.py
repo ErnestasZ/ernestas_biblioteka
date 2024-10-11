@@ -4,6 +4,7 @@ import os
 from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
+from ernestas_biblioteka.classes.records import Records
 from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log
 
 from ernestas_biblioteka.constants import LIB_FILE
@@ -15,6 +16,7 @@ class Biblioteka:
         self.books: list[Book] = []
         self.users: list[User] = []
         self.librarians: list[Librarian] = []
+        self.records: Records = None
         self.__load_data()
         self.log_consumer: User | Librarian = None
 
@@ -26,6 +28,10 @@ class Biblioteka:
                 self.books = data.books
                 self.users = data.users
                 self.librarians = data.librarians
+                if data.records:
+                    self.records = data.records
+                else:
+                    self.records = Records()
             except Exception as err:
                 print(err)
 
@@ -45,7 +51,6 @@ class Biblioteka:
             return False
         self.books.append(new_book)
         self.__save_lib()
-
 
     def add_user(self, name: str, birth_year: int) -> User | bool:
         # check year int 4 numbers and > 16
@@ -90,6 +95,9 @@ class Biblioteka:
         self.log_consumer = None
         print('atsijungiai')
         return True
+
+    # def take_book(self, user: User, book: Book):
+    #     is_taken = set_take_book(user, book)
 
     def __len__(self):
         return len(self.books)
