@@ -45,6 +45,9 @@ def set_take_book(user: User, book: Book) -> UserRecords:
         raise LookupError('Knyga šiuo metu paimta.')
     if len(user) > MAX_TAKEN_BOOKS:
         raise LookupError('Jus turite max kiekį knygų.')
+    for user_book in user.taken_books:
+        if book.eq_book(user_book):
+            raise LookupError('Jau turi šią knygą.')
     for book in user.taken_books:
         if book.taken_at + dt.timedelta(days=BOOK_OVERDUE_DAYS) > dt.datetime.now():
             raise LookupError('Turite uždelstų knygų, paimti naujų negalite.')

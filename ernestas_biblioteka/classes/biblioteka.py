@@ -45,9 +45,9 @@ class Biblioteka:
         print('Išsaugota sekmingai')
 
     def add_book(self, author: str, name: str, release_year: int, genre: str) -> Book:
-        new_book = Book(author, name, release_year, genre)
-        if new_book in self.books:
-            raise LookupError('Ši knyga pridėta')
+        # new_book = Book(author, name, release_year, genre)
+        # if new_book in self.books:
+        #     raise LookupError('Ši knyga pridėta')
         try:
             new_book = Book(author, name, release_year, genre)
         except Exception as err:
@@ -107,6 +107,7 @@ class Biblioteka:
         # check if book not taken +
         # check if user can take book by count +
         # check if user can take book by is not overdue +
+        # check if user had book by author and title +
         new_user_record = set_take_book(self.log_consumer, book)
         self.records.add_record(new_user_record)
         self.__save_lib()

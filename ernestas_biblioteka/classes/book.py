@@ -1,3 +1,4 @@
+import uuid
 from dataclasses import dataclass
 from datetime import datetime as dt
 from ernestas_biblioteka.constants import GENRES
@@ -16,6 +17,7 @@ class Book:
         self.genre = genre
         self.taken_at: dt = None
         self.is_active: bool = True
+        self.uuid = uuid.uuid4()
 
     def set_taken(self):
         self.taken_at = dt.now()
@@ -26,9 +28,14 @@ class Book:
     def set_remove(self):
         self.is_active = False
 
-    def __eq__(self, other):
+    def eq_book(self, other) -> bool:
         if isinstance(other, Book):
             return self.name == other.name and self.author == other.author
+        return False
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Book):
+            return self.uuid == other.uuid
         return False
 
     def __str__(self) -> str:

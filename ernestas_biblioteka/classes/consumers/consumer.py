@@ -1,3 +1,4 @@
+import uuid
 from dataclasses import dataclass
 import datetime as dt
 
@@ -9,3 +10,4 @@ class Consumer:
         self.type = type
         self.con_year = con_year
         self.registration_data = dt.datetime.now()
+        self.uuid = uuid.uuid4()
