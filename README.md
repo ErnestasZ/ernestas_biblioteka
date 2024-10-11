@@ -1,6 +1,7 @@
 Įsivaizduokite, kad buvote pasamdyti sukurti paprastą bibliotekos valdymo python programą, ši programa turėtų galėti atlikti šias funkcijas:
 
 ###############################
+
 Turėtų būti galima pridėti naują į knygą į biblioteką (knyga, privalo turėti bent, autorių pavadinimą išleidimo metus ir žanrą .
 
 Turėtų būti galima pašalinti senas/nebenaudojamas knygas, galima daryti pagal išleidimo metus, jeigu senesnis nei x išmetam.
@@ -18,6 +19,7 @@ Turi būti galima peržiūrėti visas vėluojančias knygas
 Turi būti neleidžiama pasiimti knygos, jeigu skaitytojas turi vėluojančią knygą ir jis turi būti įspėtas, kad knyga vėluoja
 
 ####################################
+
 Bonus Balai (neprivaloma padaryti)
 
 Knygas galima pasiimti tik su skaitytoje kortele, skaitytojo korteles reikia galėti užregistruoti ir priskirti naudotojui.
@@ -33,6 +35,7 @@ Naudojama virtuali aplinka viso darbo metu (tinka tiek venv tiek poetry)
 Galite pamėginti padaryti grafinę sąsają ir per įrankius, kaip tkinter.
 
 ######################################
+
 Būtinos sąlygos
 
 Nerašome visko viename faile (turi būti laikomasi, bent minimalios struktūros)
@@ -50,6 +53,7 @@ Programoje viskas turi būti funkcijose/metoduose klasėse. Globaliai jie gali b
 Privaloma naudota GitHub ir turėti logiškus commit pavadinimus, bent 3 šakas sukurtas projekto metu ir bent 5 commitai (commitai neturėtų būti labai dideli, po vieną funkcionalumą vienas commitas)
 
 #####################################
+
 Taip pat prisekite word failą, kuriame bus tokie dalykai.
 
 1. Įsivertinti save, kažkokiu tai pažymiu iki 10
