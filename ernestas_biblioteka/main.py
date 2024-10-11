@@ -4,7 +4,11 @@ from ernestas_biblioteka.classes.biblioteka import Biblioteka, Book
 
 new_lib = Biblioteka()
 # new_lib.add_book(Book(author="George Orwell", name="1984",
-#                  release_year=1949, genre="Distopijos ir utopijos"))
+#                       release_year=1949, genre="Distopijos ir utopijos"))
+# new_lib.add_book(author="George Orwell", name="1984",
+#                  release_year=1949, genre="Distopijos ir utopijos")
+# new_lib.add_book(author="Aldous Huxley", name="Brave New World",
+#                  release_year=1932, genre="Distopijos ir utopijos")
 # try:
 #     new_lib.add_book(Book(author="George Orwell", name="1984",
 #                           release_year=1949, genre="Distopijos ir utopijos 4"))
@@ -21,13 +25,19 @@ new_lib = Biblioteka()
 # print(len(new_lib))
 # print(new_lib.books)
 print(new_lib.users)
-print(new_lib.librarians)
+# print(new_lib.librarians)
 
 for user in new_lib.users:
     print(f'{user.user_card.card_number}')
 
 # new_lib.login_librarian('Onute', 'seacret123')
-new_lib.login_user('599826923')
-# new_lib.logout()
-if new_lib.log_consumer:
-    print(new_lib.log_consumer.name)
+new_lib.login_user('13221407')
+# # new_lib.logout()
+if new_lib.log_consumer != None:
+    print(new_lib.log_consumer.taken_books)
+
+# new_lib.take_book(new_lib.books[-1])
+# new_lib.return_book(new_lib.books[-1])
+
+for rec in new_lib.records.user_records:
+    print(f'{rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')

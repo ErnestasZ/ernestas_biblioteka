@@ -8,4 +8,6 @@ GENRES = ['Detektyvai', 'Fantastika', 'Distopijos ir utopijos', 'Istoriniai roma
 LIB_FILE = 'ernestas_biblioteka/data/biblioteka_data.pkl'
 CARD_NUM_FILE = 'ernestas_biblioteka/data/card_num_set.pkl'
 
-# CONSUMER_TYPE = ['skaitytojas', 'bibliotekininkas']
+BOOK_OVERDUE_DAYS = 20
+
+MAX_TAKEN_BOOKS = 5
