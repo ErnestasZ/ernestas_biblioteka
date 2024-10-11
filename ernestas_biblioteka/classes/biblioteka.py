@@ -120,10 +120,12 @@ class Biblioteka:
         # find book records
         book_records = fn.find_taken_book_record(
             book, self.records)
-        fn.set_return_book(book_records)
+        # return book_records
+        new_rec = fn.set_return_book(book_records)
         # self.records.add_record(new_return_record)
         self.__save_lib()
         print("grazinote knyga")
+        return new_rec
 
     def __check_login_user(self) -> None:
         if self.log_consumer == None or not isinstance(self.log_consumer, User):

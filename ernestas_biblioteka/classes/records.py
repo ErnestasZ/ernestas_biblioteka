@@ -17,7 +17,7 @@ class UserRecords:
     def __init__(self, user: User, book: Book):
         self.user = user
         self.book = book
-        self.pick_up_date = dt.now()
+        self.pick_up_date = book.taken_at
         self.return_date: dt = None
 
     def return_book(self):

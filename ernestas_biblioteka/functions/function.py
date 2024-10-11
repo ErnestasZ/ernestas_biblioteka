@@ -57,12 +57,19 @@ def set_take_book(user: User, book: Book) -> UserRecords:
 
 
 def find_taken_book_record(book: Book, records: Records):
+    print(book.taken_at)
+    # raise LookupError('testas.')
     if not records.user_records or not book.taken_at:
         raise LookupError('Irašų nerasta.')
-    book_rec = next((user_r for user_r in records.user_records if user_r.book ==
-                    book and user_r.book.taken_at == book.taken_at), None)
+    # for user_r in records.user_records:
+    #     if user_r.pick_up_date == book.taken_at:
+    #         print(user_r.book.taken_at, book.taken_at)
+    # return
+    book_rec = next((user_r for user_r in records.user_records if (user_r.book ==
+                    book) and (user_r.pick_up_date == book.taken_at)), None)
     if not book_rec:
         raise LookupError('Irašų nerasta.')
+    # book_rec.return_book()
     return book_rec
 
 
