@@ -19,7 +19,7 @@ class User(Consumer):
         return f'{self.type} - {self.name}, registracija nuo {self.registration_data}, šiuo metu turi paėmęs {len(self)}'
 
     def __repr__(self):
-        return f'{self.type} - {self.name}, registracija nuo {self.registration_data}, šiuo metu turi paėmęs {len(self)}'
+        return f'{self.type} - {self.name}, registracija nuo {self.registration_data}, šiuo metu turi {len(self)} kng.'
 
     def __len__(self):
         return len(self.taken_books)
