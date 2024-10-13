@@ -15,6 +15,14 @@ new_lib = Biblioteka()
 #                  release_year=1932, genre="Distopijos ir utopijos")
 # new_lib.add_book(author="Yevgeny Zamyatin", name="We",
 #                  release_year=1924, genre="Distopijos ir utopijos", qty=2)
+
+# new_lib.add_book(author="Margaret Atwood", name="The Handmaid's Tale",
+#                  release_year=1985, genre="Distopijos ir utopijos", qty=2)
+# new_lib.add_book(author="Ray Bradbury", name="Fahrenheit 451",
+#                  release_year=1953, genre="Distopijos ir utopijos", qty=2)
+# new_lib.add_book(author="Lois Lowry", name="The Giver",
+#                  release_year=1993, genre="Distopijos ir utopijos", qty=2)
+
 # try:
 #     new_lib.add_book(Book(author="George Orwell", name="1984",
 #                           release_year=1949, genre="Distopijos ir utopijos 4"))
@@ -29,27 +37,28 @@ new_lib = Biblioteka()
 
 
 # print(len(new_lib))
-print(new_lib.books)
+# print(new_lib.active_books())
+
 # print(new_lib.users)
 # print(new_lib.librarians)
 
 # for user in new_lib.users:
 #     print(f'{user.user_card.card_number}')
 
-new_lib.login_user('57593409')
+# new_lib.login_user('57593409')
 # # new_lib.logout()
 # if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
 #     print(new_lib.log_consumer.taken_books)
 
-new_lib.take_book(new_lib.books[1])
+# new_lib.take_book(new_lib.books[1])
 # print(new_lib.books[0].is_active)
 # new_rec = new_lib.return_book(new_lib.books[1])
 
 # print('naujas',
 #       f'{new_rec.book.name} - {new_rec.user.name} - {new_rec.pick_up_date}, {new_rec.return_date}')
 
-for rec in new_lib.records.user_records:
-    print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
+# for rec in new_lib.records.user_records:
+#     print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
 
 # for rec in new_lib.records.lib_records:
 #     print(f'{rec.book.uuid} {rec.book.name} - {rec.librarian.name} - {rec.type}, {rec.date}')
@@ -58,3 +67,13 @@ for rec in new_lib.records.user_records:
 # print(new_lib.users[-1].taken_books)
 
 # print(new_lib.remove_book_before_years(1932))
+
+
+# all active books
+print(new_lib.active_books())
+
+# find by author name
+print(new_lib.find_by_author('mar'))
+
+# find by book title
+print(new_lib.find_by_book_tite('451!!3'))

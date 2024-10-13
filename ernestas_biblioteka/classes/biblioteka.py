@@ -57,7 +57,8 @@ class Biblioteka:
         # relese date 4 digits and year <= current year +
         # genre from Genre List +
         # check qty is int
-        new_book = fn.create_book(author, name, release_year, genre, qty)
+        new_book = fn.create_book(
+            author.strip(), name, release_year, genre, qty)
         # create lib records
         self.records.add_record(LibRecords(self.log_consumer, new_book, 'add'))
         self.books.append(new_book)
@@ -151,8 +152,21 @@ class Biblioteka:
         self.__save_lib()
         print("Knygos išimtos")
 
-    def active_books(self):
+    def active_books(self) -> list[Book]:
         return [book for book in self.books if book.is_active]
+
+    def find_by_author(self, author: str) -> list[Book]:
+        v_fn.validate_name(author)
+        author = author.strip()
+        act_books = self.active_books()
+        return [book for book in act_books if author.lower() in book.author.lower()]
+
+    def find_by_book_tite(self, title: str):
+        title_str = str(title)
+        if len(str(title_str)) < 1:
+            raise ValueError('įveskite knygos pavadinimą.')
+        act_books = self.active_books()
+        return [book for book in act_books if title_str.lower() in book.name.lower()]
 
     def __check_login_user(self) -> None:
         if self.log_consumer == None or not isinstance(self.log_consumer, User):
