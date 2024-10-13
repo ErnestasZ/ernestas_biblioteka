@@ -50,6 +50,9 @@ class Book:
     #         return self.uuid == other.uuid
     #     return False
 
+    def __len__(self):
+        return self.qty - len(self.taken_by)
+
     def __eq__(self, other) -> bool:
         if isinstance(other, Book):
             return self.name == other.name and self.author == other.author

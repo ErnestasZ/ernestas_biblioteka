@@ -45,8 +45,10 @@ def check_librarian_for_log(librarians: list[Librarian], name: str,  password: s
 def set_take_book(user: User, book: Book) -> UserRecords:
     # if book.taken_at:
     #     raise LookupError('Knyga šiuo metu paimta.')
+    if not book.is_active:
+        raise LookupError('Neglite paimti sios knygos, nes nebėra.')
 
-    if book.qty <= len(book.taken_by):
+    if len(book) < 1:
         raise LookupError('Paimti visi knygos egzemplioriai.')
     if len(user) > MAX_TAKEN_BOOKS:
         raise LookupError('Jus turite max kiekį knygų.')

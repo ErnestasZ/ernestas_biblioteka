@@ -39,9 +39,9 @@ new_lib.login_user('57593409')
 # if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
 #     print(new_lib.log_consumer.taken_books)
 
-# new_lib.take_book(new_lib.books[1])
-# print(new_lib.books[-1])
-new_rec = new_lib.return_book(new_lib.books[1])
+new_lib.take_book(new_lib.books[0])
+# print(len(new_lib.books[1]))
+# new_rec = new_lib.return_book(new_lib.books[1])
 
 # print('naujas',
 #       f'{new_rec.book.name} - {new_rec.user.name} - {new_rec.pick_up_date}, {new_rec.return_date}')
