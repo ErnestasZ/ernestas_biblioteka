@@ -1,8 +1,8 @@
 from datetime import datetime as dt
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from ernestas_biblioteka.classes.book import Book
+# if TYPE_CHECKING:
+from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.consumers.consumer import Consumer
 
 from ernestas_biblioteka.classes.consumers.user_card import UserCard
@@ -14,9 +14,14 @@ class TakenBook:
         self.taken_at = dt.now()
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, 'Book'):
-            return self.book.name == other.name and self.book.author == other.author
+        if isinstance(other, TakenBook):
+            return self.book == other.book
+        if isinstance(other, Book):
+            return self.book == other
         return False
+
+    def __repr__(self):
+        return str(self.book)
 
 
 class User(Consumer):
@@ -30,6 +35,9 @@ class User(Consumer):
 
     def return_book(self, book: 'Book'):
         self.taken_books.remove(book)
+
+    def find_taken_book(self, book: 'Book') -> TakenBook:
+        return next((taken_book for taken_book in self.taken_books if book == taken_book.book), None)
 
     def __eq__(self, other) -> bool:
         if isinstance(other, User):

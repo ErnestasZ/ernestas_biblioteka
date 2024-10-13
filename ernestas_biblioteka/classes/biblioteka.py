@@ -112,7 +112,7 @@ class Biblioteka:
     def take_book(self, book: Book) -> None:
         # check if login
         self.__check_login_user()
-        # check if book not taken +
+        # check if book has free qty +
         # check if user can take book by count +
         # check if user can take book by is not overdue +
         # check if user had book by author and title +
@@ -127,8 +127,8 @@ class Biblioteka:
         if book not in self.log_consumer.taken_books:
             raise LookupError('Neturi sios knygos')
         # find book records
-        book_records = fn.find_taken_book_record(
-            book, self.records)
+        book_records = fn.find_taken_book_record(self.log_consumer,
+                                                 book, self.records)
         # return book_records
         new_rec = fn.set_return_book(book_records)
         # self.records.add_record(new_return_record)

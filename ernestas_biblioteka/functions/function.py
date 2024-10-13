@@ -43,35 +43,47 @@ def check_librarian_for_log(librarians: list[Librarian], name: str,  password: s
 
 
 def set_take_book(user: User, book: Book) -> UserRecords:
-    if book.taken_at:
-        raise LookupError('Knyga šiuo metu paimta.')
+    # if book.taken_at:
+    #     raise LookupError('Knyga šiuo metu paimta.')
+
+    if book.qty <= len(book.taken_by):
+        raise LookupError('Paimti visi knygos egzemplioriai.')
     if len(user) > MAX_TAKEN_BOOKS:
         raise LookupError('Jus turite max kiekį knygų.')
-    for user_book in user.taken_books:
-        if book.eq_book(user_book):
-            raise LookupError('Jau turi šią knygą.')
-    for book in user.taken_books:
-        if book.taken_at + dt.timedelta(days=BOOK_OVERDUE_DAYS) > dt.datetime.now():
-            raise LookupError('Turite uždelstų knygų, paimti naujų negalite.')
+    # for user_book in user.taken_books:
+    #     if book.eq_book(user_book):
+    #         raise LookupError('Jau turi šią knygą.')
+    if book in user.taken_books:
+        raise LookupError('Jau turi šią knygą.')
+
+    for taken_book in user.taken_books:
+        # print('Paimtos knygos', taken_book.taken_at)
+        if taken_book.taken_at + dt.timedelta(days=BOOK_OVERDUE_DAYS) < dt.datetime.now():
+            raise LookupError(
+                'Kol turite uždelstų knygų, paimti naujų negalite.')
 
     user.add_book(book)
-    book.set_taken()
+    book.set_taken(user)
 
     # create records
     return UserRecords(user, book)
 
 
-def find_taken_book_record(book: Book, records: Records):
-    print(book.taken_at)
+def find_taken_book_record(user: User, book: Book, records: Records):
+    # print(book.taken_at)
     # raise LookupError('testas.')
-    if not records.user_records or not book.taken_at:
+    taken_book = user.find_taken_book(book)
+    print('paimta knyga', taken_book)
+    if not records.user_records or not taken_book:
         raise LookupError('Irašų nerasta.')
+
     # for user_r in records.user_records:
     #     if user_r.pick_up_date == book.taken_at:
     #         print(user_r.book.taken_at, book.taken_at)
     # return
+
     book_rec = next((user_r for user_r in records.user_records if (user_r.book ==
-                    book) and (user_r.pick_up_date == book.taken_at)), None)
+                    book) and (user_r.pick_up_date == taken_book.taken_at)), None)
     if not book_rec:
         raise LookupError('Irašų nerasta.')
     # book_rec.return_book()
@@ -80,7 +92,7 @@ def find_taken_book_record(book: Book, records: Records):
 
 def set_return_book(user_record: UserRecords):
     user_record.user.return_book(user_record.book)
-    user_record.book.set_return()
+    user_record.book.set_return(user_record.user)
     user_record.return_book()
     return user_record
 

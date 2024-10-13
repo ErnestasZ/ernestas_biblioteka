@@ -35,7 +35,7 @@ class Book:
         self.taken_by.append(user)
 
     def set_return(self, user: 'User'):
-        self.taken_at.remove(user)
+        self.taken_by.remove(user)
 
     def set_remove(self):
         self.is_active = False
