@@ -4,7 +4,7 @@ import os
 from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
-from ernestas_biblioteka.classes.records import Records
+from ernestas_biblioteka.classes.records import Records, LibRecords
 from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log, set_take_book
 import ernestas_biblioteka.functions.function as fn
 import ernestas_biblioteka.functions.validation_func as v_fn
@@ -58,6 +58,8 @@ class Biblioteka:
         # genre from Genre List +
         # check qty is int
         new_book = fn.create_book(author, name, release_year, genre, qty)
+        # create lib records
+        self.records.add_record(LibRecords(self.log_consumer, new_book, 'add'))
         self.books.append(new_book)
         self.__save_lib()
         return new_book
@@ -135,6 +137,22 @@ class Biblioteka:
         self.__save_lib()
         print("grazinote knyga")
         return new_rec
+
+    def remove_book_before_years(self, year: int | str):
+        self.__check_login_lib()
+        # remove all book before year
+        find_books = fn.find_all_book_before(self.active_books(), year)
+        # set book is active = False
+        # list(map(lambda book: book.set_remove(), find_books))
+        for book in find_books:
+            book.set_remove()
+            self.records.add_record(LibRecords(
+                self.log_consumer, book, 'remove'))
+        self.__save_lib()
+        print("Knygos išimtos")
+
+    def active_books(self):
+        return [book for book in self.books if book.is_active]
 
     def __check_login_user(self) -> None:
         if self.log_consumer == None or not isinstance(self.log_consumer, User):

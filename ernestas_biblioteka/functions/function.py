@@ -1,5 +1,6 @@
 import bcrypt
 import datetime as dt
+import bisect
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.book import Book
@@ -107,3 +108,18 @@ def create_book(author: str, name: str, release_year: int, genre: str, qty: str 
     v_fn.validate_book_genre(genre)
     v_fn.validate_qty(qty)
     return Book(author, name, release_year, genre, qty)
+
+
+def find_all_book_before(active_books: list[Book], year: str | int):
+    v_fn.validate_year(year)
+    # find active book
+    if not active_books:
+        raise LookupError('Nera įkelta knygų')
+
+    active_books.sort(key=lambda book: book.release_year)
+    index = bisect.bisect_right(
+        [book.release_year for book in active_books], year)
+    books_list = active_books[:index]
+    if not books_list:
+        raise LookupError('Pagal metus neradome knygu')
+    return books_list
