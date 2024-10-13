@@ -44,13 +44,19 @@ class Biblioteka:
             print(err)
         print('Išsaugota sekmingai')
 
-    def add_book(self, author: str, name: str, release_year: str, genre: str) -> Book:
+    def add_book(self, author: str, name: str, release_year: str, genre: str, qty: str | int = 1) -> Book:
         # only register librarian +
         self.__check_login_lib()
+        # check if book exist
+        for book in self.books:
+            if author == book.author and name == book.name:
+                raise LookupError(
+                    'Tokia knyga jau yra binbliotekoje, pakeiskite kiekį.')
         # check author non digits only letters > 3 +
         # check name > 0 +
         # relese date 4 digits and year <= current year +
         # genre from Genre List +
+        # check qty is int
         new_book = fn.create_book(author, name, release_year, genre)
         self.books.append(new_book)
         self.__save_lib()

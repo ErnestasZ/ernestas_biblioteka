@@ -85,11 +85,11 @@ def set_return_book(user_record: UserRecords):
     return user_record
 
 
-def create_book(author: str, name: str, release_year: int, genre: str) -> Book:
+def create_book(author: str, name: str, release_year: int, genre: str, qty: str | int) -> Book:
     v_fn.validate_name(author)
     if len(str(name)) < 1:
         raise ValueError('įveskite knygos pavadinimą.')
     v_fn.validate_year(release_year)
     v_fn.validate_book_genre(genre)
-
-    return Book(author, name, release_year, genre)
+    v_fn.validate_qty(qty)
+    return Book(author, name, release_year, genre, qty)

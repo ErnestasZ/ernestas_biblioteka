@@ -3,27 +3,35 @@ from dataclasses import dataclass
 from datetime import datetime as dt
 from ernestas_biblioteka.constants import GENRES
 from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
-# from ernestas_biblioteka.classes.consumers.user import User
+from ernestas_biblioteka.classes.consumers.user import User
 
 
 @dataclass
 class Book:
-    def __init__(self, author: str, name: str, release_year: int, genre: str):
+    def __init__(self, author: str, name: str, release_year: int, genre: str, qty: str = 1):
         if genre not in GENRES:
             raise InvalidGenreError(genre)
         self.author = author
         self.name = name
         self.release_year = release_year
         self.genre = genre
-        self.taken_at: dt = None
+        # self.taken_at: dt = None
+        self.taken_by: list[User] = []
+        self.qty = int(qty)
         self.is_active: bool = True
         self.uuid = uuid.uuid4()
 
-    def set_taken(self):
-        self.taken_at = dt.now()
+    # def set_taken(self):
+    #     self.taken_at = dt.now()
 
-    def set_return(self):
-        self.taken_at = None
+    # def set_return(self):
+    #     self.taken_at = None
+
+    def set_taken(self, user: User):
+        self.taken_by.append(user)
+
+    def set_return(self, user: User):
+        self.taken_at.remove(user)
 
     def set_remove(self):
         self.is_active = False
@@ -33,9 +41,14 @@ class Book:
             return self.name == other.name and self.author == other.author
         return False
 
+    # def __eq__(self, other) -> bool:
+    #     if isinstance(other, Book):
+    #         return self.uuid == other.uuid
+    #     return False
+
     def __eq__(self, other) -> bool:
         if isinstance(other, Book):
-            return self.uuid == other.uuid
+            return self.name == other.name and self.author == other.author
         return False
 
     def __str__(self) -> str:

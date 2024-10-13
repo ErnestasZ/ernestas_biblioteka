@@ -48,3 +48,12 @@ def validate_password(password: str) -> bool:
             'Slaptažodis turi būti be tarpų.')
 
     return True
+
+
+def validate_qty(qty: str | int) -> bool:
+    if not str(qty).isdigit():
+        raise ValueError('Iveskite kiekį skaičiai.')
+    if int(qty) < 1 and int(qty) > 100:
+        raise ValueError('Kiekis turi būti nuo 1 iki 100.')
+
+    return True
