@@ -21,6 +21,11 @@ class Librarian(Consumer):
             return True
         return False
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Librarian):
+            return self.name == other.name
+        return False
+
     def __str__(self):
         return f'{self.type} - {self.name}, dirba nuo {self.registration_data}'
 

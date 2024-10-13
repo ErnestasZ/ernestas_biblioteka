@@ -8,6 +8,7 @@ from ernestas_biblioteka.classes.records import Records, LibRecords
 from ernestas_biblioteka.functions.function import check_is_user_unique, check_is_librarian_unique, check_user_for_log, check_librarian_for_log, set_take_book
 import ernestas_biblioteka.functions.function as fn
 import ernestas_biblioteka.functions.validation_func as v_fn
+import ernestas_biblioteka.functions.stat_function as stat_fn
 from ernestas_biblioteka.constants import LIB_FILE, USER_MIN_AGE, LIB_MIN_AGE
 
 
@@ -167,6 +168,20 @@ class Biblioteka:
             raise ValueError('įveskite knygos pavadinimą.')
         act_books = self.active_books()
         return [book for book in act_books if title_str.lower() in book.name.lower()]
+
+    ######################################################
+    ######################################################
+    # stat
+    def get_book_stat(self):
+        # !!!!!!! kas yra vidutinis vieluojanciu knygu skaicius? Cia vieno skaitytojo?
+        overdue_average = stat_fn.get_overdue_averange_by_user(
+            self.records.user_records)
+
+        # all overdue book but not return book by now
+        # all taken but not returned book count. (maybe list)
+        # most books by genre
+        # most book by taken user, by genre
+        ...
 
     def __check_login_user(self) -> None:
         if self.log_consumer == None or not isinstance(self.log_consumer, User):

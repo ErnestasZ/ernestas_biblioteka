@@ -11,3 +11,6 @@ class Consumer:
         self.con_year = con_year
         self.registration_data = dt.datetime.now()
         self.uuid = uuid.uuid4()
+
+    def __hash__(self) -> int:
+        return hash(self.uuid)
