@@ -19,7 +19,7 @@ def validate_name(name: str) -> bool:
 
 
 def validate_year(year: str, min_age: int = 0) -> bool:
-    if len(str(year)) != 4 or not year.isdigit():
+    if len(str(year)) != 4 or not str(year).isdigit():
         raise ValueError(
             'Metai iš 4 skaičių.')
 
