@@ -57,7 +57,7 @@ class Biblioteka:
         # relese date 4 digits and year <= current year +
         # genre from Genre List +
         # check qty is int
-        new_book = fn.create_book(author, name, release_year, genre)
+        new_book = fn.create_book(author, name, release_year, genre, qty)
         self.books.append(new_book)
         self.__save_lib()
         return new_book

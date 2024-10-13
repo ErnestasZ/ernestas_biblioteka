@@ -1,22 +1,26 @@
 import uuid
 from dataclasses import dataclass
-from datetime import datetime as dt
-from ernestas_biblioteka.constants import GENRES
-from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
-from ernestas_biblioteka.classes.consumers.user import User
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ernestas_biblioteka.classes.consumers.user import User
+# from datetime import datetime as dt
+# from ernestas_biblioteka.constants import GENRES
+# from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
+# from ernestas_biblioteka.classes.consumers.user import User as UserClass
 
 
 @dataclass
 class Book:
     def __init__(self, author: str, name: str, release_year: int, genre: str, qty: str = 1):
-        if genre not in GENRES:
-            raise InvalidGenreError(genre)
+        # if genre not in GENRES:
+        #     raise InvalidGenreError(genre)
         self.author = author
         self.name = name
         self.release_year = release_year
         self.genre = genre
         # self.taken_at: dt = None
-        self.taken_by: list[User] = []
+        self.taken_by: list['User'] = []
         self.qty = int(qty)
         self.is_active: bool = True
         self.uuid = uuid.uuid4()
@@ -27,10 +31,10 @@ class Book:
     # def set_return(self):
     #     self.taken_at = None
 
-    def set_taken(self, user: User):
+    def set_taken(self, user: 'User'):
         self.taken_by.append(user)
 
-    def set_return(self, user: User):
+    def set_return(self, user: 'User'):
         self.taken_at.remove(user)
 
     def set_remove(self):
@@ -52,7 +56,7 @@ class Book:
         return False
 
     def __str__(self) -> str:
-        return f'"{self.name}" - {self.author}, išleista {self.release_year}m. ({self.genre})'
+        return f'"{self.name}" - {self.author}, išleista {self.release_year}m. - {self.qty} vnt. ({self.genre})'
 
     def __repr__(self) -> str:
-        return f'"{self.name}" - {self.author}, išleista {self.release_year}m. ({self.genre})'
+        return f'"{self.name}" - {self.author}, išleista {self.release_year}m. - {self.qty} vnt. ({self.genre})'

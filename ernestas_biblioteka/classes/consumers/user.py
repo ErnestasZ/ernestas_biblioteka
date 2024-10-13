@@ -1,16 +1,20 @@
 from datetime import datetime as dt
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.consumers.consumer import Consumer
-from ernestas_biblioteka.classes.book import Book
+
 from ernestas_biblioteka.classes.consumers.user_card import UserCard
 
 
 class TakenBook:
-    def __init__(self, book: Book):
+    def __init__(self, book: 'Book'):
         self.book = book
         self.taken_at = dt.now()
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Book):
+        if isinstance(other, 'Book'):
             return self.book.name == other.name and self.book.author == other.author
         return False
 
@@ -21,10 +25,10 @@ class User(Consumer):
         self.user_card = UserCard()
         self.taken_books: list[TakenBook] = []
 
-    def add_book(self, book: Book):
+    def add_book(self, book: 'Book'):
         self.taken_books.append(TakenBook(book))
 
-    def return_book(self, book: Book):
+    def return_book(self, book: 'Book'):
         self.taken_books.remove(book)
 
     def __eq__(self, other) -> bool:

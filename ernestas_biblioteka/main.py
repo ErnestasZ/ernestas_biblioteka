@@ -4,10 +4,13 @@ from ernestas_biblioteka.classes.consumers.user import User
 
 
 new_lib = Biblioteka()
+
+new_lib.login_librarian('Onute', 'seacret123')
+
 # new_lib.add_book(Book(author="George Orwell", name="1984",
 #   release_year=1949, genre="Distopijos ir utopijos"))
 # new_lib.add_book(author="George Orwell", name="1984",
-#                  release_year=1949, genre="Distopijos ir utopijos")
+#                  release_year=1949, genre="Distopijos ir utopijos", qty=3)
 # new_lib.add_book(author="Aldous Huxley", name="Brave New World",
 #                  release_year=1932, genre="Distopijos ir utopijos")
 # try:
@@ -19,8 +22,7 @@ new_lib = Biblioteka()
 #########################
 
 
-new_lib.add_user('Arvydas', 2000)
-# new_lib.add_librarian('Onute', 1986, 'seacret123')
+# new_lib.add_user('Arvydas', 2000)
 
 
 # print(len(new_lib))
@@ -31,7 +33,6 @@ print(new_lib.books)
 for user in new_lib.users:
     print(f'{user.user_card.card_number}')
 
-new_lib.login_librarian('Onute', 'seacret123')
 # new_lib.login_user('12863734')
 # # new_lib.logout()
 if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
