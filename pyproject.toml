@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 streamlit = "^1.39.0"
 bcrypt = "^4.2.0"
+faker = "^30.3.0"
 
 
 [build-system]
