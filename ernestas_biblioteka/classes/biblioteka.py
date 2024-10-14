@@ -9,7 +9,7 @@ from ernestas_biblioteka.functions.function import check_is_user_unique, check_i
 import ernestas_biblioteka.functions.function as fn
 import ernestas_biblioteka.functions.validation_func as v_fn
 import ernestas_biblioteka.functions.stat_function as stat_fn
-from ernestas_biblioteka.constants import LIB_FILE, USER_MIN_AGE, LIB_MIN_AGE
+from ernestas_biblioteka.constants import LIB_FILE, USER_MIN_AGE, LIB_MIN_AGE, SUPER_LIB
 
 
 @dataclass
@@ -21,6 +21,10 @@ class Biblioteka:
         self.records: Records = None
         self.__load_data()
         self.log_consumer: User | Librarian = None
+        # defaul Librarian
+        if not self.librarians:
+            self.add_librarian(
+                SUPER_LIB['name'], SUPER_LIB['year'], SUPER_LIB['password'])
 
     def __load_data(self):
         if os.path.exists(LIB_FILE):
@@ -34,8 +38,11 @@ class Biblioteka:
                     self.records = data.records
                 else:
                     self.records = Records()
+                return True
             except Exception as err:
                 print(err)
+
+        self.records = Records()
 
     def __save_lib(self):
         try:
@@ -124,6 +131,13 @@ class Biblioteka:
         self.records.add_record(new_user_record)
         self.__save_lib()
         print("paemete knyga sekmingai")
+
+    def take_book_fake(self, book: Book, user: User):
+        new_user_record = set_take_book(user, book)
+        self.records.add_record(new_user_record)
+        self.__save_lib()
+        print("paemete knyga sekmingai")
+        return new_user_record
 
     def return_book(self, book: Book) -> None:
         self.__check_login_user()

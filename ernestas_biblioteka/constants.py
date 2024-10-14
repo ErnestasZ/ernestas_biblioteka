@@ -8,10 +8,14 @@ GENRES = ['Detektyvai', 'Fantastika', 'Distopijos ir utopijos', 'Istoriniai roma
 LIB_FILE = 'ernestas_biblioteka/data/biblioteka_data.pkl'
 CARD_NUM_FILE = 'ernestas_biblioteka/data/card_num_set.pkl'
 
-BOOK_OVERDUE_DAYS = 20
+BOOK_OVERDUE_DAYS = 10
 
 MAX_TAKEN_BOOKS = 3
 
 USER_MIN_AGE = 16
 
 LIB_MIN_AGE = 18
+
+SUPER_LIB = {'name': 'Onute', 'year': 1890, 'password': 'seacret123'}
+
+SUPER_CARD_NUM = "34561234"

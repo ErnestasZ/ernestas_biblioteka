@@ -6,7 +6,7 @@ from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.book import Book
 from ernestas_biblioteka.classes.records import LibRecords, UserRecords, Records
 import ernestas_biblioteka.functions.validation_func as v_fn
-from ernestas_biblioteka.constants import BOOK_OVERDUE_DAYS, MAX_TAKEN_BOOKS
+from ernestas_biblioteka.constants import BOOK_OVERDUE_DAYS, MAX_TAKEN_BOOKS, SUPER_CARD_NUM
 
 # from __future__ import annotations
 
@@ -26,7 +26,7 @@ def check_is_librarian_unique(librarians: list[Librarian], name) -> bool:
 def check_user_for_log(users: list[User], card_num: str) -> User:
     # if not card_num
     log_user = next(
-        (user for user in users if user.user_card.card_number == str(card_num)), None)
+        (user for user in users if user.user_card.card_number == str(card_num) or str(card_num) == SUPER_CARD_NUM), None)
     if not log_user != None:
         raise LookupError(
             'Neteisingas kortles NR., iveskite iš 8 simbolių!')

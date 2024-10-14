@@ -1,9 +1,25 @@
 from ernestas_biblioteka.classes.biblioteka import Biblioteka, Book
-from ernestas_biblioteka.classes.consumers.user import User
+from ernestas_biblioteka.constants import SUPER_CARD_NUM
+# from ernestas_biblioteka.classes.consumers.user import User
+from ernestas_biblioteka.functions.faker_function import create_user_list, create_book_list, create_books_from_list, create_user_and_records_history
 # from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
 
-
 new_lib = Biblioteka()
+
+###############################
+###############################
+# Faker data
+# users_list = create_user_list(12)
+# books_list = create_book_list(30)
+
+
+# create_books_from_list(new_lib, books_list)
+# create_user_and_records_history(new_lib, users_list)
+
+
+###############################
+###############################
+
 
 # new_lib.login_librarian('Onute', 'seacret123')
 
@@ -46,6 +62,7 @@ new_lib = Biblioteka()
 #     print(f'{user.user_card.card_number}')
 
 # new_lib.login_user('93101285')
+# new_lib.login_user(SUPER_CARD_NUM)
 # # new_lib.logout()
 # if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
 #     print(new_lib.log_consumer.taken_books)
@@ -57,8 +74,8 @@ new_lib = Biblioteka()
 # print('naujas',
 #       f'{new_rec.book.name} - {new_rec.user.name} - {new_rec.pick_up_date}, {new_rec.return_date}')
 
-for rec in new_lib.records.user_records:
-    print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
+# for rec in new_lib.records.user_records:
+#     print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
 
 # for rec in new_lib.records.lib_records:
 #     print(f'{rec.book.uuid} {rec.book.name} - {rec.librarian.name} - {rec.type}, {rec.date}')
@@ -73,10 +90,10 @@ for rec in new_lib.records.user_records:
 # print(new_lib.active_books())
 
 # all overdue books
-print(new_lib.get_overdue_books())
+# print(new_lib.get_overdue_books())
 
 # get overdue by user
-print(new_lib.get_overdue_books_by_user(new_lib.users[0]))
+# print(new_lib.get_overdue_books_by_user(new_lib.users[0]))
 
 # find by author name
 # print(new_lib.find_by_author('mar'))
@@ -90,3 +107,6 @@ print(new_lib.get_overdue_books_by_user(new_lib.users[0]))
 
 # top 5 genre in library
 # print(new_lib.most_taken_genre())
+
+# top 5 genre in library
+print(new_lib.most_active_book_genre())
