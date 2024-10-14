@@ -8,7 +8,7 @@ new_lib = Biblioteka()
 # new_lib.login_librarian('Onute', 'seacret123')
 
 # new_lib.add_book(Book(author="George Orwell", name="1984",
-#   release_year=1949, genre="Distopijos ir utopijos"))
+#                       release_year=1949, genre="Distopijos ir utopijos"))
 # new_lib.add_book(author="George Orwell", name="1984",
 #                  release_year=1949, genre="Distopijos ir utopijos", qty=3)
 # new_lib.add_book(author="Aldous Huxley", name="Brave New World",
@@ -45,7 +45,7 @@ new_lib = Biblioteka()
 # for user in new_lib.users:
 #     print(f'{user.user_card.card_number}')
 
-# new_lib.login_user('57593409')
+# new_lib.login_user('93101285')
 # # new_lib.logout()
 # if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
 #     print(new_lib.log_consumer.taken_books)
@@ -57,8 +57,8 @@ new_lib = Biblioteka()
 # print('naujas',
 #       f'{new_rec.book.name} - {new_rec.user.name} - {new_rec.pick_up_date}, {new_rec.return_date}')
 
-# for rec in new_lib.records.user_records:
-#     print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
+for rec in new_lib.records.user_records:
+    print(f'{rec.book.uuid} {rec.book.name} - {rec.user.name} - {rec.pick_up_date}, {rec.return_date}')
 
 # for rec in new_lib.records.lib_records:
 #     print(f'{rec.book.uuid} {rec.book.name} - {rec.librarian.name} - {rec.type}, {rec.date}')
@@ -70,10 +70,23 @@ new_lib = Biblioteka()
 
 
 # all active books
-print(new_lib.active_books())
+# print(new_lib.active_books())
+
+# all overdue books
+print(new_lib.get_overdue_books())
+
+# get overdue by user
+print(new_lib.get_overdue_books_by_user(new_lib.users[0]))
 
 # find by author name
-print(new_lib.find_by_author('mar'))
+# print(new_lib.find_by_author('mar'))
 
 # find by book title
-print(new_lib.find_by_book_tite('451!!3'))
+# print(new_lib.find_by_book_tite('451!!3'))
+
+
+# stat averange overdue
+# new_lib.get_book_overdue_mean_stat()
+
+# top 5 genre in library
+# print(new_lib.most_taken_genre())

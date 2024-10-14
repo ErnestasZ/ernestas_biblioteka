@@ -26,6 +26,9 @@ class Librarian(Consumer):
             return self.name == other.name
         return False
 
+    def __hash__(self) -> int:
+        return hash(self.uuid)
+
     def __str__(self):
         return f'{self.type} - {self.name}, dirba nuo {self.registration_data}'
 

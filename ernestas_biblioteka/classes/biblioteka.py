@@ -156,6 +156,10 @@ class Biblioteka:
     def active_books(self) -> list[Book]:
         return [book for book in self.books if book.is_active]
 
+    def get_overdue_books(self) -> list[(Book, User)]:
+        overdue_at_now = stat_fn.get_overdue_at_now(self.records.user_records)
+        return overdue_at_now
+
     def find_by_author(self, author: str) -> list[Book]:
         v_fn.validate_name(author)
         author = author.strip()
@@ -169,19 +173,33 @@ class Biblioteka:
         act_books = self.active_books()
         return [book for book in act_books if title_str.lower() in book.name.lower()]
 
+    def get_overdue_books_by_user(self, user: User):
+        overdue_books = fn.get_user_overdue(user)
+        return overdue_books
+
     ######################################################
     ######################################################
     # stat
-    def get_book_stat(self):
+
+    def get_overdue_books(self) -> list[(Book, User)]:
+        overdue_at_now = stat_fn.get_overdue_at_now(self.records.user_records)
+        return overdue_at_now
+
+    def get_book_overdue_mean_stat(self) -> float:
         # !!!!!!! kas yra vidutinis vieluojanciu knygu skaicius? Cia vieno skaitytojo?
         overdue_average = stat_fn.get_overdue_averange_by_user(
             self.records.user_records)
 
-        # all overdue book but not return book by now
-        # all taken but not returned book count. (maybe list)
-        # most books by genre
-        # most book by taken user, by genre
-        ...
+        print(overdue_average)
+        return overdue_average
+
+    def most_active_book_genre(self) -> dict:
+        # top 5
+        return stat_fn.get_most_genre(self.active_books())
+
+    def most_taken_genre(self) -> dict:
+        # top 5
+        return stat_fn.get_most_taken_genre(self.records.user_records)
 
     def __check_login_user(self) -> None:
         if self.log_consumer == None or not isinstance(self.log_consumer, User):

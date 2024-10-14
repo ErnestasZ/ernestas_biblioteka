@@ -51,7 +51,7 @@ def set_take_book(user: User, book: Book) -> UserRecords:
 
     if len(book) < 1:
         raise LookupError('Paimti visi knygos egzemplioriai.')
-    if len(user) > MAX_TAKEN_BOOKS:
+    if len(user) >= MAX_TAKEN_BOOKS:
         raise LookupError('Jus turite max kiekį knygų.')
     # for user_book in user.taken_books:
     #     if book.eq_book(user_book):
@@ -123,3 +123,13 @@ def find_all_book_before(active_books: list[Book], year: str | int):
     if not books_list:
         raise LookupError('Pagal metus neradome knygu')
     return books_list
+
+
+def get_user_overdue(user: User) -> list[Book]:
+    overdue_books = []
+    for taken_book in user.taken_books:
+        # print('Paimtos knygos', taken_book.taken_at)
+        if taken_book.taken_at + dt.timedelta(days=BOOK_OVERDUE_DAYS) < dt.datetime.now():
+            overdue_books.append(taken_book.book)
+
+    return overdue_books

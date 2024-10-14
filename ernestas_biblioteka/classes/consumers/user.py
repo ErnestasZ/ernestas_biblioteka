@@ -43,8 +43,9 @@ class User(Consumer):
         if isinstance(other, User):
             return self.name == other.name
         return False
-    
-    
+
+    def __hash__(self) -> int:
+        return hash(self.uuid)
 
     def __str__(self):
         return f'{self.type} - {self.name}, registracija nuo {self.registration_data}, šiuo metu turi paėmęs {len(self)}'

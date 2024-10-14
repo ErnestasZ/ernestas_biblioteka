@@ -10,7 +10,7 @@ CARD_NUM_FILE = 'ernestas_biblioteka/data/card_num_set.pkl'
 
 BOOK_OVERDUE_DAYS = 20
 
-MAX_TAKEN_BOOKS = 5
+MAX_TAKEN_BOOKS = 3
 
 USER_MIN_AGE = 16
 
