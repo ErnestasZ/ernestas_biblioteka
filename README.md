@@ -1,3 +1,7 @@
+## Demo app ernestas_biblioteka
+
+https://ernestasbiblioteka.streamlit.app/
+
 Įsivaizduokite, kad buvote pasamdyti sukurti paprastą bibliotekos valdymo python programą, ši programa turėtų galėti atlikti šias funkcijas:
 
 ###############################
