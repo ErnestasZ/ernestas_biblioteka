@@ -19,18 +19,26 @@ class Biblioteka:
         self.users: list[User] = []
         self.librarians: list[Librarian] = []
         self.records: Records = None
-        self.__load_data()
         self.log_consumer: User | Librarian = None
+        # self.log_new = None
         # defaul Librarian
+        self.__load_data()
         if not self.librarians:
             self.add_librarian(
                 SUPER_LIB['name'], SUPER_LIB['year'], SUPER_LIB['password'])
+
+    # def __post_init__(self):
+    #     self.__load_data()
 
     def __load_data(self):
         if os.path.exists(LIB_FILE):
             try:
                 with open(LIB_FILE, 'rb') as file:
                     data = pickle.load(file)
+                print('log_consumer', data.log_consumer)
+                self.log_consumer = data.log_consumer
+                print('setf_log_consumer', self.log_consumer)
+                self
                 self.books = data.books
                 self.users = data.users
                 self.librarians = data.librarians
@@ -104,6 +112,7 @@ class Biblioteka:
         # check card_number int, == 8 , No need +
         user = check_user_for_log(self.users, card_num)
         self.log_consumer = user
+        self.__save_lib()
         print("prisijungei sėkmingai")
         return user
 
@@ -112,11 +121,13 @@ class Biblioteka:
         # check password min >=6 no need +
         librarian = check_librarian_for_log(self.librarians, name, password)
         self.log_consumer = librarian
+        self.__save_lib()
         print("prisijungei sėkmingai")
         return librarian
 
     def logout(self) -> bool:
         self.log_consumer = None
+        self.__save_lib()
         print('atsijungiai')
         return True
 

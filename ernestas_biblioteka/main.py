@@ -57,12 +57,14 @@ new_lib = Biblioteka()
 
 # print(new_lib.users)
 # print(new_lib.librarians)
+print(new_lib.log_consumer)
 
 # for user in new_lib.users:
 #     print(f'{user.user_card.card_number}')
 
 # new_lib.login_user('93101285')
 # new_lib.login_user(SUPER_CARD_NUM)
+# print(new_lib.log_consumer)
 # # new_lib.logout()
 # if new_lib.log_consumer != None and isinstance(new_lib.log_consumer, User):
 #     print(new_lib.log_consumer.taken_books)
@@ -99,7 +101,7 @@ new_lib = Biblioteka()
 # print(new_lib.find_by_author('mar'))
 
 # find by book title
-# print(new_lib.find_by_book_tite('451!!3'))
+# print(new_lib.find_by_book_tite('line'))
 
 
 # stat averange overdue
@@ -109,4 +111,4 @@ new_lib = Biblioteka()
 # print(new_lib.most_taken_genre())
 
 # top 5 genre in library
-print(new_lib.most_active_book_genre())
+# print(new_lib.most_active_book_genre())
