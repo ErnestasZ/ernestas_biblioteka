@@ -6,6 +6,7 @@ https://ernestasbiblioteka.streamlit.app/
 
 1. paleidimas su streamlit, iš failo ernestas_biblioteka/streamlit/app.py
 2. demo prisijungimai, Bibliotekininkas ({vardas: 'Onute', password: seacret123})
+3. prisijungus galima pažiūrėti visus skitytojus ir kortelių nr., su kuriais galima prisijungti prie skaitytojų.
 
 ## Papildomai atlikta
 
@@ -19,6 +20,7 @@ https://ernestasbiblioteka.streamlit.app/
 - pradelstų knygų sąrašas iškarto su skaitytoju.
 
 4. Sukurtas fakeris, kuris sukuria knygas, įkelia sukurdamas įrašus bibliotekininkui, sukuria skaitytojus ir jiems priskiria papimtas knygas su įvairiais paėmimo laikais ir sukuria įrašus apie tai.
+5. Knygų grąžinimas į biblioteką
 
 ## Pagrindinės užduotys
 
