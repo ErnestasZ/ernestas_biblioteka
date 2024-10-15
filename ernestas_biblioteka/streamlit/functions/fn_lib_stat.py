@@ -31,4 +31,4 @@ def lib_stat_box(new_lib):
         else:
             for genre, count in new_lib.most_active_book_genre().items():
                 col2.markdown(f"""**{genre}**:   
-                              paimta {count} kart. """)
+                              {count} šio žanro kng. """)
