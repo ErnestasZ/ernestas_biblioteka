@@ -57,7 +57,7 @@ new_lib = Biblioteka()
 
 # print(new_lib.users)
 # print(new_lib.librarians)
-print(new_lib.log_consumer)
+# print(new_lib.log_consumer)
 
 # for user in new_lib.users:
 #     print(f'{user.user_card.card_number}')
@@ -85,30 +85,30 @@ print(new_lib.log_consumer)
 # print(new_lib.books[-1].taken_at)
 # print(new_lib.users[-1].taken_books)
 
-# print(new_lib.remove_book_before_years(1932))
+# print(new_lib.remove_book_before_years(1001))
 
 
 # all active books
-# print(new_lib.active_books())
+# print(new_lib.active_books()) +
 
 # all overdue books
 # print(new_lib.get_overdue_books())
 
 # get overdue by user
-# print(new_lib.get_overdue_books_by_user(new_lib.users[0]))
+# print(new_lib.get_overdue_books_by_user(new_lib.users[0])) +
 
 # find by author name
-# print(new_lib.find_by_author('mar'))
+# print(new_lib.find_by_author('mar')) +
 
 # find by book title
-# print(new_lib.find_by_book_tite('line'))
+# print(new_lib.find_by_book_tite('line')) +
 
 
 # stat averange overdue
-# new_lib.get_book_overdue_mean_stat()
+# new_lib.get_book_overdue_mean_stat() +
 
 # top 5 genre in library
-# print(new_lib.most_taken_genre())
+# print(new_lib.most_taken_genre()) +
 
 # top 5 genre in library
-# print(new_lib.most_active_book_genre())
+# print(new_lib.most_active_book_genre()) +

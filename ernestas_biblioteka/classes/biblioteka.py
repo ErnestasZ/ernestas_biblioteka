@@ -170,6 +170,7 @@ class Biblioteka:
         # remove all book before year
         find_books = fn.find_all_book_before(self.active_books(), year)
         # set book is active = False
+
         # list(map(lambda book: book.set_remove(), find_books))
         for book in find_books:
             book.set_remove()

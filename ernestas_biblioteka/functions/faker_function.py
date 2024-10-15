@@ -100,8 +100,9 @@ def generate_rand_date(max_day_before):
     random_return_days = random.randint(0, random_pick_days)
 
     random_pick_date = start_date + timedelta(days=random_pick_days)
-    if random.choice([True, False]):
-        rand_return_date = start_date + timedelta(days=random_return_days)
-    else:
-        rand_return_date = None
+    # if random.choice([True, False]):
+    #     rand_return_date = start_date + timedelta(days=random_return_days)
+    # else:
+    #     rand_return_date = None
+    rand_return_date = None
     return random_pick_date, rand_return_date

@@ -61,21 +61,24 @@ def open_login_lib():
 
 
 with col1:
-    st.button(
+    if st.button(
         label="Skaitytojui",
         type="primary",
         on_click=open_login_user,
         # args=[st.session_state.tweet],
-    )
+    ):
+        st.switch_page('pages/user.py')
+
 
 # Button in the second column (Green)
 with col2:
-    st.button(
+    if st.button(
         label="Bibliotekininkui",
         type="secondary",
         on_click=open_login_lib,
         # args=[st.session_state.tweet],
-    )
+    ):
+        st.switch_page('pages/librarian.py')
 
 
 # options = st.multiselect(
@@ -92,27 +95,27 @@ with col2:
 # st.page_link("pages/librarian.py", label="Bibliotekininkas", icon="🏠")
 # st.page_link("pages/lib/librarian.py", label="Bibliotekininkas", icon="🏠")
 
-genre = st.radio(
-    "What's your favorite movie genre",
-    [":rainbow[Comedy]", "***Drama***", "Documentary"],
-    captions=[
-        "Laugh out loud.",
-        "Get the popcorn.",
-        "Never stop learning.",
-    ],
-)
+# genre = st.radio(
+#     "What's your favorite movie genre",
+#     [":rainbow[Comedy]", "***Drama***", "Documentary"],
+#     captions=[
+#         "Laugh out loud.",
+#         "Get the popcorn.",
+#         "Never stop learning.",
+#     ],
+# )
 
-if genre == ":rainbow[Comedy]":
-    st.write("You selected comedy.")
-else:
-    st.write("You didn't select comedy.")
+# if genre == ":rainbow[Comedy]":
+#     st.write("You selected comedy.")
+# else:
+#     st.write("You didn't select comedy.")
 
 
-vertical_alignment = st.selectbox(
-    "Vertical alignment", ["top", "center", "bottom"], index=2
-)
+# vertical_alignment = st.selectbox(
+#     "Vertical alignment", ["top", "center", "bottom"], index=2
+# )
 
-left, middle, right = st.columns(3, vertical_alignment=vertical_alignment)
-left.image("https://static.streamlit.io/examples/cat.jpg")
-middle.image("https://static.streamlit.io/examples/dog.jpg")
-right.image("https://static.streamlit.io/examples/owl.jpg")
+# left, middle, right = st.columns(3, vertical_alignment=vertical_alignment)
+# left.image("https://static.streamlit.io/examples/cat.jpg")
+# middle.image("https://static.streamlit.io/examples/dog.jpg")
+# right.image("https://static.streamlit.io/examples/owl.jpg")

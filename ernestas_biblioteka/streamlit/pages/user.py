@@ -58,8 +58,11 @@ for book in active_books:
     col1, col2 = container.columns([3, 1])
 
     with col1:
+        if not book.is_active:
+            col1.markdown(f':bin: **Išimta**')
         col1.markdown(f':book: **{book.name}**')
-        col1.markdown(f"""*Author:* {book.author} | {book.release_year} y.                
+        col1.markdown(f"""*Author:* {book.author} | {book.release_year} y.      
+*{book.genre}*          
 Qty: {book.qty} / taken: {len(book.taken_by)}""")
 
     with col2:

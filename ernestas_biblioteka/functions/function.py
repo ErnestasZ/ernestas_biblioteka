@@ -116,9 +116,9 @@ def find_all_book_before(active_books: list[Book], year: str | int):
     if not active_books:
         raise LookupError('Nera įkelta knygų')
 
-    active_books.sort(key=lambda book: book.release_year)
+    active_books.sort(key=lambda book: int(book.release_year))
     index = bisect.bisect_right(
-        [book.release_year for book in active_books], year)
+        [int(book.release_year) for book in active_books], int(year))
     books_list = active_books[:index]
     if not books_list:
         raise LookupError('Pagal metus neradome knygu')

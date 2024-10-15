@@ -24,7 +24,7 @@ def validate_year(year: str, min_age: int = 0) -> bool:
             'Metai iš 4 skaičių.')
 
     year_int = int(year)
-    if year_int < 1000 or year_int >= (datetime.now().year - min_age):
+    if year_int < 1000 or year_int >= int(datetime.now().year - min_age):
         raise ValueError(
             f'Iveskite teisingus metus, negali būti > už {datetime.now().year - min_age}, ir < už 1000.')
 
