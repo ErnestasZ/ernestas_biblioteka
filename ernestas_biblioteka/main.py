@@ -4,17 +4,19 @@ from ernestas_biblioteka.constants import SUPER_CARD_NUM
 from ernestas_biblioteka.functions.faker_function import create_user_list, create_book_list, create_books_from_list, create_user_and_records_history
 # from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
 
+
+###############################
+###############################
 new_lib = Biblioteka()
 
-###############################
-###############################
+#############
 # Faker data
-# users_list = create_user_list(12)
-# books_list = create_book_list(30)
+users_list = create_user_list(12)
+books_list = create_book_list(30)
 
 
-# create_books_from_list(new_lib, books_list)
-# create_user_and_records_history(new_lib, users_list)
+create_books_from_list(new_lib, books_list)
+create_user_and_records_history(new_lib, users_list)
 
 
 ###############################
