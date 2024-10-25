@@ -1,4 +1,4 @@
-import bcrypt
+# import bcrypt
 import datetime as dt
 import bisect
 from ernestas_biblioteka.classes.consumers.user import User

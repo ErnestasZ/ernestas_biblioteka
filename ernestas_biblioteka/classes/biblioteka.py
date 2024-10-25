@@ -35,9 +35,9 @@ class Biblioteka:
             try:
                 with open(LIB_FILE, 'rb') as file:
                     data = pickle.load(file)
-                print('log_consumer', data.log_consumer)
+                # print('log_consumer', data.log_consumer)
                 self.log_consumer = data.log_consumer
-                print('setf_log_consumer', self.log_consumer)
+                # print('setf_log_consumer', self.log_consumer)
                 self
                 self.books = data.books
                 self.users = data.users

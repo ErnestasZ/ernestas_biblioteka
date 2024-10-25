@@ -21,6 +21,9 @@ class Librarian(Consumer):
             return True
         return False
 
+    def get_password(self):
+        return self.__password
+
     def __eq__(self, other) -> bool:
         if isinstance(other, Librarian):
             return self.name == other.name

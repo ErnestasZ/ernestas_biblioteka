@@ -1,5 +1,6 @@
 import random
 import os
+import sqlite3
 import pickle
 from ernestas_biblioteka.constants import CARD_NUM_FILE
 
@@ -7,6 +8,7 @@ from ernestas_biblioteka.constants import CARD_NUM_FILE
 class UserCard:
     def __init__(self):
         self.card_number = self.__generate_number()
+        self.card_number_db = self.__generete_number_db()
 
     def __generate_number(self) -> str:
         num_set = self.__load_cards_num()
@@ -19,6 +21,10 @@ class UserCard:
                 # self.card_number = card_number
                 self.__save_new_number(num_set)
                 return card_number
+
+    def __generete_number_db(self) -> int:
+        # with sqlite3.connect()
+        pass
 
     def __load_cards_num(self) -> set:
         if os.path.exists(CARD_NUM_FILE):

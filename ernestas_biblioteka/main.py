@@ -1,22 +1,59 @@
+import sqlite3
+import psycopg2
 from ernestas_biblioteka.classes.biblioteka import Biblioteka, Book
-from ernestas_biblioteka.constants import SUPER_CARD_NUM
+from ernestas_biblioteka.constants import SUPER_CARD_NUM, LIBRARY_DB
 # from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.functions.faker_function import create_user_list, create_book_list, create_books_from_list, create_user_and_records_history
 # from ernestas_biblioteka.classes.cus_exeptions import InvalidGenreError
+from ernestas_biblioteka.functions.db_functions import create_book, create_librarian, create_tables, create_user_db
+import ernestas_biblioteka.functions.db_psql_functions as pg_fn
 
 
-###############################
-###############################
 new_lib = Biblioteka()
+print(new_lib.users[0].uuid)
 
-#############
-# Faker data
-users_list = create_user_list(12)
-books_list = create_book_list(30)
+###############################
+###############################
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="biblioteka",
+    user="postgres",
+    password="ppasvaiste"
+)
+# data base
+# create_tables()
+# try:
+#     with conn:
+#         # for user in new_lib.users:
+#         #     pg_fn.create_user_db(user, conn)
+#         # for lib in new_lib.librarians:
+#         #     pg_fn.create_librarian(lib, conn)
+#         # for book in new_lib.books:
+#         #     pg_fn.create_book(book, conn)
+#         # for u_record in new_lib.records.user_records:
+#         #     pg_fn.create_user_record(u_record, conn)
+#         # pass
+#         for l_record in new_lib.records.lib_records:
+#             pg_fn.create_lib_record(l_record, conn)
+# except Exception as e:
+#     print('Klaida', e)
+
+# finally:
+#     if conn:
+#         conn.close()
+
+###############################
+###############################
+
+# #############
+# # Faker data
+# users_list = create_user_list(12)
+# books_list = create_book_list(30)
 
 
-create_books_from_list(new_lib, books_list)
-create_user_and_records_history(new_lib, users_list)
+# create_books_from_list(new_lib, books_list)
+# create_user_and_records_history(new_lib, users_list)
 
 
 ###############################

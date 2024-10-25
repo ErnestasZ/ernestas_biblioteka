@@ -1,8 +1,10 @@
 import random
 from faker import Faker
 from datetime import datetime, timedelta
-from ernestas_biblioteka.constants import USER_MIN_AGE, GENRES, SUPER_LIB
+from ernestas_biblioteka.constants import USER_MIN_AGE, GENRES, SUPER_LIB, LIB_FILE
 from ernestas_biblioteka.classes.biblioteka import Biblioteka
+import pickle
+import os
 
 
 fake = Faker()
@@ -106,3 +108,26 @@ def generate_rand_date(max_day_before):
     #     rand_return_date = None
     rand_return_date = None
     return random_pick_date, rand_return_date
+
+
+def transfer_data_to_db():
+    data = None
+    if os.path.exists(LIB_FILE):
+        try:
+            with open(LIB_FILE, 'rb') as file:
+                data = pickle.load(file)
+        except Exception as err:
+            print(err)
+
+    # if data:
+    #      self.log_consumer = data.log_consumer
+    #             # print('setf_log_consumer', self.log_consumer)
+    #             self
+    #             self.books = data.books
+    #             self.users = data.users
+    #             self.librarians = data.librarians
+    #             if data.records:
+    #                 self.records = data.records
+    #             else:
+    #                 self.records = Records()
+    #             return True
