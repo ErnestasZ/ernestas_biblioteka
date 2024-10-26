@@ -4,6 +4,8 @@ from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.classes.records import UserRecords, LibRecords
 from ernestas_biblioteka.classes.book import Book
+from dotenv import load_dotenv
+import os
 
 
 # try:
@@ -18,14 +20,22 @@ from ernestas_biblioteka.classes.book import Book
 #     print('Klaida', e)
 
 
-def create_tables():
+def db_connection():
+    load_dotenv()
+
     conn = psycopg2.connect(
-        host="localhost",
-        port="5432",
-        database="biblioteka",
-        user="postgres",
-        password="ppasvaiste"
+        host=os.getenv('DB_HOST'),
+        port=os.getenv('DB_PORT'),
+        database=os.getenv('DB_NAME'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD')
     )
+    return conn
+
+
+def create_tables():
+    conn = db_connection()
+
     try:
         with conn:
             c = conn.cursor()

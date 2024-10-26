@@ -1,0 +1,2 @@
+class BibliotekaDB:
+    pass

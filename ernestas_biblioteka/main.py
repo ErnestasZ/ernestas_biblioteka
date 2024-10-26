@@ -14,13 +14,7 @@ print(new_lib.users[0].uuid)
 
 ###############################
 ###############################
-conn = psycopg2.connect(
-    host="localhost",
-    port="5432",
-    database="biblioteka",
-    user="postgres",
-    password="ppasvaiste"
-)
+conn = pg_fn.db_connection()
 # data base
 # create_tables()
 # try:
