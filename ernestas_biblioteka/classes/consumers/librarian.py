@@ -16,6 +16,24 @@ class Librarian(Consumer):
         hashed = bcrypt.hashpw(password.encode(), salt)
         return hashed.decode()
 
+    @classmethod
+    def lib_from_db(cls, result: tuple[str, str, int, str]):
+        """
+        Args:
+            result (tuple[str, str, int, str]): A tuple containing:
+                - uuid: (str) The UUID of the librarian.
+                - name: (str) The name of the librarian.
+                - birth_year: (int) The birth year of the librarian.
+                - password: (str) The hashed password of the librarian.
+        """
+        uuid, name, birth_year, password, registration_date = result
+        librarian = cls(name=name, con_year=birth_year,
+                        password=password)
+        librarian.uuid = uuid
+        librarian.type = 'bibliotekininkas'
+        librarian.registration_data = registration_date
+        return librarian
+
     def check_password(self, log_password: str) -> bool:
         if bcrypt.checkpw(log_password.encode(), self.__password.encode()):
             return True

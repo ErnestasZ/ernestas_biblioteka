@@ -22,41 +22,48 @@ import os
 
 def db_connection():
     load_dotenv()
+    # print(os.getenv('DB_PASSWORD'))
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv('DB_HOST'),
+            port=os.getenv('DB_PORT'),
+            database=os.getenv('DB_NAME'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD')
+        )
+        # print('conn succsess')
+        return conn
 
-    conn = psycopg2.connect(
-        host=os.getenv('DB_HOST'),
-        port=os.getenv('DB_PORT'),
-        database=os.getenv('DB_NAME'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD')
-    )
-    return conn
+    except Exception as e:
+        print('conn', e)
 
 
 def create_tables():
-    conn = db_connection()
+    # conn = db_connection()
 
     try:
-        with conn:
+        with db_connection() as conn:
             c = conn.cursor()
 
             # Enable the uuid-ossp extension for UUID generation
             c.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";")
 
-            # Create consumers table with uuid as primary key
+            # Create consumers table
             c.execute("""CREATE TABLE IF NOT EXISTS consumers (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 name VARCHAR(255) NOT NULL,
-                birth_year SMALLINT NOT NULL
+                birth_year SMALLINT NOT NULL,
+                registration_date DATE
+                
             )""")
 
-            # Create user_cards table with uuid as primary key
+            # Create user_cards table
             c.execute("""CREATE TABLE IF NOT EXISTS user_cards (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 card_number BIGINT NOT NULL UNIQUE  
             )""")
 
-            # Create users table with uuid as primary key
+            # Create users table
             c.execute("""CREATE TABLE IF NOT EXISTS users (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 consumer_uuid UUID,
@@ -65,7 +72,7 @@ def create_tables():
                 FOREIGN KEY (card_uuid) REFERENCES user_cards(uuid)
             )""")
 
-            # Create librarians table with uuid as primary key
+            # Create librarians table
             c.execute("""CREATE TABLE IF NOT EXISTS librarians (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 consumer_uuid UUID,
@@ -73,7 +80,7 @@ def create_tables():
                 FOREIGN KEY (consumer_uuid) REFERENCES consumers(uuid)
             )""")
 
-            # Create login table with uuid as primary key
+            # Create login table
             c.execute("""CREATE TABLE IF NOT EXISTS login (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 librarian_uuid UUID DEFAULT NULL,
@@ -82,7 +89,7 @@ def create_tables():
                 FOREIGN KEY (user_uuid) REFERENCES users(uuid)
             )""")
 
-            # Create books table with uuid as primary key
+            # Create books table
             c.execute("""CREATE TABLE IF NOT EXISTS books (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 author VARCHAR(255) NOT NULL,
@@ -93,7 +100,7 @@ def create_tables():
                 is_active BOOLEAN DEFAULT TRUE
             )""")
 
-            # Create lib_records table with uuid as primary key
+            # Create lib_records table
             c.execute("""CREATE TABLE IF NOT EXISTS lib_records (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 type VARCHAR(255) NOT NULL,
@@ -104,7 +111,7 @@ def create_tables():
                 FOREIGN KEY (book_uuid) REFERENCES books(uuid)
             )""")
 
-            # Create user_records table with uuid as primary key
+            # Create user_records table
             c.execute("""CREATE TABLE IF NOT EXISTS user_records (
                 uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 taken_at DATE DEFAULT CURRENT_DATE,
@@ -117,8 +124,12 @@ def create_tables():
     except psycopg2.DatabaseError as e:
         print('Klaida:', e)
 
+    finally:
+        if conn:
+            conn.close()
 
-# create_tables()
+
+create_tables()
 
 
 def create_user_db(user: User, conn: psycopg2):
@@ -141,9 +152,9 @@ def create_user_db(user: User, conn: psycopg2):
 
 
 def create_consumer(consumer: User | Librarian, cursor: psycopg2):
-    cursor.execute("""INSERT INTO consumers (name, birth_year)
-                Values (%s, %s)
-                RETURNING uuid""", (consumer.name, consumer.con_year))
+    cursor.execute("""INSERT INTO consumers (name, birth_year, registration_date)
+                Values (%s, %s, %s)
+                RETURNING uuid""", (consumer.name, consumer.con_year, consumer.registration_data))
     consumer_id = cursor.fetchone()[0]
     print(consumer_id)
     return consumer_id

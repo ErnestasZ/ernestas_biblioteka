@@ -1,6 +1,7 @@
 import sqlite3
 import psycopg2
 from ernestas_biblioteka.classes.biblioteka import Biblioteka, Book
+from ernestas_biblioteka.classes.db_biblioteka import BibliotekaDB
 from ernestas_biblioteka.constants import SUPER_CARD_NUM, LIBRARY_DB
 # from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.functions.faker_function import create_user_list, create_book_list, create_books_from_list, create_user_and_records_history
@@ -9,24 +10,50 @@ from ernestas_biblioteka.functions.db_functions import create_book, create_libra
 import ernestas_biblioteka.functions.db_psql_functions as pg_fn
 
 
-new_lib = Biblioteka()
-print(new_lib.users[0].uuid)
+lib_db = BibliotekaDB()
+# print(lib_db.get_books())
+# for book in lib_db.get_books('', 'title', True):
+#     print(book)
+
+# for book in lib_db.top_5_genre_by_user():
+#     print(book)
+
+# for book in lib_db.top_5_genre_by_library():
+#     print(book)
+
+# for book in lib_db.get_overdue_books():
+#     print(book)
+
+# for user in lib_db.get_book_overdue_mean_stat():
+#     print(user)
+# print(lib_db.get_book_overdue_mean_stat())
+
+
+# for user in lib_db.get_users_with_overdue():
+#     print(user)
+
+for user in lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489'):
+    print(user)
+##############################
+##############################
+# new_lib = Biblioteka()
+# print(new_lib.users[0].uuid)
 
 ###############################
 ###############################
-conn = pg_fn.db_connection()
+# conn = pg_fn.db_connection()
 # data base
 # create_tables()
 # try:
-#     with conn:
-#         # for user in new_lib.users:
-#         #     pg_fn.create_user_db(user, conn)
-#         # for lib in new_lib.librarians:
-#         #     pg_fn.create_librarian(lib, conn)
-#         # for book in new_lib.books:
-#         #     pg_fn.create_book(book, conn)
-#         # for u_record in new_lib.records.user_records:
-#         #     pg_fn.create_user_record(u_record, conn)
+#     with pg_fn.db_connection() as conn:
+#         for user in new_lib.users:
+#             pg_fn.create_user_db(user, conn)
+#         for lib in new_lib.librarians:
+#             pg_fn.create_librarian(lib, conn)
+#         for book in new_lib.books:
+#             pg_fn.create_book(book, conn)
+#         for u_record in new_lib.records.user_records:
+#             pg_fn.create_user_record(u_record, conn)
 #         # pass
 #         for l_record in new_lib.records.lib_records:
 #             pg_fn.create_lib_record(l_record, conn)
