@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 import random
 from ernestas_biblioteka.classes.consumers.user import User
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
@@ -32,6 +33,7 @@ def db_connection():
             password=os.getenv('DB_PASSWORD')
         )
         # print('conn succsess')
+        conn.cursor_factory = psycopg2.extras.DictCursor
         return conn
 
     except Exception as e:

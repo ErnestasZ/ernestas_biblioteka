@@ -5,6 +5,7 @@ from ernestas_biblioteka.classes.consumers.librarian import Librarian
 from ernestas_biblioteka.constants import SUPER_LIB, LIB_MIN_AGE, BOOK_OVERDUE_DAYS
 import ernestas_biblioteka.functions.validation_func as v_fn
 import ernestas_biblioteka.functions.function as fn
+import ernestas_biblioteka.functions.dto_functions as dto_fn
 
 
 # biblioteka_fn = Biblioteka()
@@ -125,7 +126,13 @@ class BibliotekaDB:
             return results
 
     def get_users_with_overdue(self):
-        base_query = """SELECT c.name, uc.card_number, b.title, count(urc.uuid)
+        base_query = """SELECT 
+                        u.uuid
+                        c.name, 
+                        c.birth_year
+                        uc.card_number, 
+                        b.*, 
+                        count(urc.uuid)
                         From users u
                         Join consumers c On u.consumer_uuid = c.uuid
                         Join user_cards uc On u.card_uuid = uc.uuid
@@ -147,11 +154,15 @@ class BibliotekaDB:
 
     def get_user_with_book(self, user_uuid: str):
         base_query = """Select 
-                        c.name, 
-                        b.title, 
-                        (EXTRACT(DAY FROM (NOW() - ur.taken_at)) - %(overdue_days)s) 
+                        u.uuid as user_uuid,
+                        c.*, 
+                        b.uuid as book_uuid,
+                        b.*, 
+                        uc.*,
+                        (EXTRACT(DAY FROM (NOW() - ur.taken_at)) - %(overdue_days)s) as overdue_days
                         from users u
                         Join consumers c on u.consumer_uuid = c.uuid
+                        Join user_cards uc on u.card_uuid = uc.uuid
                         Join user_records ur On u.uuid = ur.user_uuid
                             and return_at Is Null
                         Join books b on ur.book_uuid = b.uuid
@@ -162,7 +173,8 @@ class BibliotekaDB:
             c.execute(
                 base_query, {'user_uuid': user_uuid, 'overdue_days': BOOK_OVERDUE_DAYS})
             results = c.fetchall()
-            return results
+        return dto_fn.create_login_user_data_DTO(results)
+        return results
 
     def add_librarian(self, name: str, birth_year: str, password: str) -> Librarian | bool:
         # ceck name > 2 +
@@ -182,23 +194,56 @@ class BibliotekaDB:
 
     #####
     # Just started, not finished
-    def add_book(self, author: str, name: str, release_year: str, genre: str, qty: str | int = 1) -> Book:
-        # only register librarian +
-        self.__check_login_lib()
-        # check if book exist
-        for book in self.books:
-            if author == book.author and name == book.name:
-                raise LookupError(
-                    'Tokia knyga jau yra binbliotekoje, pakeiskite kiekį.')
-        # check author non digits only letters > 3 +
-        # check name > 0 +
-        # relese date 4 digits and year <= current year +
-        # genre from Genre List +
-        # check qty is int
-        new_book = fn.create_book(
-            author.strip(), name, release_year, genre, qty)
-        # create lib records
-        self.records.add_record(LibRecords(self.log_consumer, new_book, 'add'))
-        # self.books.append(new_book)
-        # self.__save_lib()
-        return new_book
+
+    def login_user(self, card_number: int):
+        # # from db
+        # find user by card number
+        find_user_query = """Select u.uuid from users u
+                            Join user_cards uc On u.card_uuid = uc.uuid
+                            Where uc.card_number = %(card_number)s"""
+
+        clear_login = """TRUNCATE login RESTART IDENTITY"""
+
+        save_login = """INSERT INTO login (user_uuid) Values (%(user_uuid)s)"""
+
+        with pg_fn.db_connection() as conn:
+            c = conn.cursor()
+            c.execute(
+                find_user_query, {'card_number': card_number})
+            found_user = c.fetchall()
+
+            if not found_user:
+                raise LookupError("Nerasta skaitytojo kortelė")
+
+            # clear login table
+            c.execute(clear_login)
+
+            # save to login table
+            c.execute(save_login, {'user_uuid': found_user[0]})
+
+        # # from class
+        # create user class object
+
+        # save to class
+
+    def add_book(self, author: str, name: str, release_year: str, genre: str, qty: str | int = 1):
+        pass
+        # # only register librarian +
+        # self.__check_login_lib()
+        # # check if book exist
+        # for book in self.books:
+        #     if author == book.author and name == book.name:
+        #         raise LookupError(
+        #             'Tokia knyga jau yra binbliotekoje, pakeiskite kiekį.')
+        # # check author non digits only letters > 3 +
+        # # check name > 0 +
+        # # relese date 4 digits and year <= current year +
+        # # genre from Genre List +
+        # # check qty is int
+        # new_book = fn.create_book(
+        #     author.strip(), name, release_year, genre, qty)
+        # # create lib records
+        # self.records.add_record(LibRecords(self.log_consumer, new_book, 'add'))
+        # # self.books.append(new_book)
+        # # self.__save_lib()
+        # return new_book

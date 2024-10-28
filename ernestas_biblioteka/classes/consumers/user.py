@@ -30,6 +30,24 @@ class User(Consumer):
         self.user_card = UserCard()
         self.taken_books: list[TakenBook] = []
 
+    @classmethod
+    def lib_from_db(cls, result: tuple[str, str, int, str]):
+        """
+        Args:
+            result (tuple[str, str, int, str]): A tuple containing:
+                - uuid: (str) The UUID of User.
+                - name: (str) The name of user.
+                - birth_year: (int) The birth year of the user.
+                - card: (str) The hashed password of the librarian.
+        """
+        uuid, name, birth_year, password, registration_date = result
+        librarian = cls(name=name, con_year=birth_year,
+                        password=password)
+        librarian.uuid = uuid
+        librarian.type = 'bibliotekininkas'
+        librarian.registration_data = registration_date
+        return librarian
+
     def add_book(self, book: 'Book'):
         self.taken_books.append(TakenBook(book))
 

@@ -32,8 +32,13 @@ lib_db = BibliotekaDB()
 # for user in lib_db.get_users_with_overdue():
 #     print(user)
 
-for user in lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489'):
-    print(user)
+# for user in lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489'):
+#     print(user['name'], user['user_uuid'], user['book_uuid'])
+
+dto_user = lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489')
+for book in dto_user.taken_books_list:
+    print(book.title)
+
 ##############################
 ##############################
 # new_lib = Biblioteka()
