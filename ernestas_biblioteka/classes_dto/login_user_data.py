@@ -42,3 +42,11 @@ class LoginUserDataDTO:
 
     def __len__(self):
         return len(self.taken_books_list)
+    
+class LoginLibDataDTO:
+    def __init__(self, **kwargs):
+        self.uuid = kwargs.get('lib_uuid')
+        self.birth_year =  kwargs.get('birth_year')
+
+
+

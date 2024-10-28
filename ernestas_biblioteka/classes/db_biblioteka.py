@@ -2,19 +2,34 @@ import ernestas_biblioteka.functions.db_psql_functions as pg_fn
 from ernestas_biblioteka.classes.consumers.user import User
 # from ernestas_biblioteka.classes.biblioteka import Biblioteka
 from ernestas_biblioteka.classes.consumers.librarian import Librarian
-from ernestas_biblioteka.constants import SUPER_LIB, LIB_MIN_AGE, BOOK_OVERDUE_DAYS
+from ernestas_biblioteka.constants import SUPER_LIB, LIB_MIN_AGE, BOOK_OVERDUE_DAYS, MAX_TAKEN_BOOKS
 import ernestas_biblioteka.functions.validation_func as v_fn
 import ernestas_biblioteka.functions.function as fn
 import ernestas_biblioteka.functions.dto_functions as dto_fn
+from ernestas_biblioteka.classes_dto.login_user_data import UserTakenBookDTO, LoginUserDataDTO, LoginLibDataDTO
 
 
 # biblioteka_fn = Biblioteka()
 class BibliotekaDB:
     def __init__(self):
-        self.log_consumer: User | Librarian = None
+        self.log_consumer: LoginUserDataDTO | LoginLibDataDTO = None
         self.librarians = []
         self.__check_default_librarian()
+        self.__get_login_consumer()
         # self.__load_loginconsumer()
+
+    def __get_login_consumer(self):
+        login_q = """Select user_uuid, librarian_uuid from login"""
+
+        with pg_fn.db_connection() as conn:
+            c = conn.cursor()
+            c.execute(login_q)
+            log_uuid = c.fetchone()
+        if log_uuid['user_uuid']:
+            self.log_consumer = self.get_user_with_book(log_uuid['user_uuid'])
+            return
+        if log_uuid['librarian_uuid']:
+            return
 
     def __check_default_librarian(self):
         with pg_fn.db_connection() as conn:
@@ -37,22 +52,29 @@ class BibliotekaDB:
 
         if search_type not in ['author', 'title']:
             raise ValueError('Neteisingas paieskos parametras')
-        base_query = f"""SELECT b.*, count(ur.uuid) From books b
+        base_query = f"""SELECT 
+                    b.uuid as book_uuid,
+                    b.*, 
+                    count(ur.uuid) as taken_qty
+                    From books b
                     Left Join user_records ur ON b.uuid = ur.book_uuid
-                    Where ur.return_at Is Null
-                    and {search_type} ILIKE %(search)s
+                    and ur.return_at Is Null
+                    Where {search_type} ILIKE %(search)s
                     """
         query_params = {'search': f'%{search}%'}
         if is_active != None:
             base_query += ' and b.is_active = %(is_active)s'
             query_params['is_active'] = is_active
-        base_query += ' Group by b.uuid'
+        base_query += ' Group by b.uuid Order by b.title'
         with pg_fn.db_connection() as conn:
             c = conn.cursor()
             c.execute(
                 base_query, query_params)
             results = c.fetchall()
-            return results
+        book_dto = dto_fn.create_books_DTO(results)
+        if not book_dto:
+            book_dto = []
+        return book_dto
 
     def top_5_genre_by_user(self):
         base_query = """Select b.genre, count(b.genre) as book_count from user_records ur
@@ -174,7 +196,7 @@ class BibliotekaDB:
                 base_query, {'user_uuid': user_uuid, 'overdue_days': BOOK_OVERDUE_DAYS})
             results = c.fetchall()
         return dto_fn.create_login_user_data_DTO(results)
-        return results
+        # return results
 
     def add_librarian(self, name: str, birth_year: str, password: str) -> Librarian | bool:
         # ceck name > 2 +
@@ -198,7 +220,10 @@ class BibliotekaDB:
     def login_user(self, card_number: int):
         # # from db
         # find user by card number
-        find_user_query = """Select u.uuid from users u
+        print('take_book')
+        find_user_query = """Select 
+                            u.uuid 
+                            from users u
                             Join user_cards uc On u.card_uuid = uc.uuid
                             Where uc.card_number = %(card_number)s"""
 
@@ -210,7 +235,8 @@ class BibliotekaDB:
             c = conn.cursor()
             c.execute(
                 find_user_query, {'card_number': card_number})
-            found_user = c.fetchall()
+            found_user = c.fetchone()
+            print(found_user['uuid'])
 
             if not found_user:
                 raise LookupError("Nerasta skaitytojo kortelė")
@@ -219,12 +245,42 @@ class BibliotekaDB:
             c.execute(clear_login)
 
             # save to login table
-            c.execute(save_login, {'user_uuid': found_user[0]})
+            c.execute(save_login, {'user_uuid': found_user['uuid']})
+
+        self.log_consumer = self.get_user_with_book(found_user['uuid'])
 
         # # from class
         # create user class object
 
         # save to class
+
+    def take_book(self, book: UserTakenBookDTO) -> None:
+        # check if login
+        # print('gavau')
+        self.__check_login_user()
+        # check if book has free qty +
+        if book.qty <= book.taken_qty:
+            raise LookupError('Paimtos visos knygos')
+        # check if user can take book by count +
+        log_user = self.log_consumer
+        if len(log_user) >= MAX_TAKEN_BOOKS:
+            raise LookupError('Paemes max kieki knygų')
+        # check if user can take book by is not overdue +
+        # check if user had book by author and title +
+        if len(log_user):
+            for u_book in log_user.taken_books_list:
+                # print(book.overdue_days)
+                if u_book == book:
+                    raise LookupError('Jau turi tokia knyga paemes')
+                if u_book.overdue_days > 0:
+                    raise LookupError('Turi pradelstu grazinti knygu')
+        
+
+        # new_user_record = set_take_book(self.log_consumer, book)
+        
+        # self.records.add_record(new_user_record)
+        # self.__save_lib()
+        # print("paemete knyga sekmingai")
 
     def add_book(self, author: str, name: str, release_year: str, genre: str, qty: str | int = 1):
         pass
@@ -247,3 +303,7 @@ class BibliotekaDB:
         # # self.books.append(new_book)
         # # self.__save_lib()
         # return new_book
+
+    def __check_login_user(self) -> None:
+        if self.log_consumer == None or not isinstance(self.log_consumer, LoginUserDataDTO):
+            raise LookupError('Turi buti prisijunges skaitytojas')

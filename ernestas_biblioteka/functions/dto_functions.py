@@ -16,3 +16,15 @@ def create_login_user_data_DTO(query_results):
     login_user.taken_books_list = books_list
 
     return login_user
+
+
+def create_books_DTO(query_results):
+    books_list = []
+    if not query_results:
+        return books_list
+    for res in query_results:
+        taken_book = UserTakenBookDTO(**res)
+        if taken_book:
+            books_list.append(taken_book)
+
+    return books_list

@@ -12,9 +12,12 @@ import ernestas_biblioteka.functions.db_psql_functions as pg_fn
 
 lib_db = BibliotekaDB()
 # print(lib_db.get_books())
-# for book in lib_db.get_books('', 'title', True):
-#     print(book)
+# for book in lib_db.get_books('mar', 'author', None):
+#     print(book.uuid, book.title)
 
+# lib_db.take_book('boook')
+
+lib_db.login_user('59864142')
 # for book in lib_db.top_5_genre_by_user():
 #     print(book)
 
@@ -35,9 +38,9 @@ lib_db = BibliotekaDB()
 # for user in lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489'):
 #     print(user['name'], user['user_uuid'], user['book_uuid'])
 
-dto_user = lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489')
-for book in dto_user.taken_books_list:
-    print(book.title)
+# dto_user = lib_db.get_user_with_book('bc41c4da-78fa-465c-9040-4850a7641489')
+# for book in dto_user.taken_books_list:
+#     print(book.title)
 
 ##############################
 ##############################
