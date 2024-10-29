@@ -15,7 +15,7 @@ def user_card_box(new_lib):
 
     def return_book(taken_book):
         try:
-            new_lib.return_book(taken_book.book)
+            new_lib.return_book(taken_book)
             st.rerun()
             # taken_books_session.pop(taken_book.book.name)
             # for name, sess_book in taken_books_session.items():
@@ -49,6 +49,8 @@ def user_card_box(new_lib):
         # for name, taken_book in taken_books_session.items():
 
         for taken_book in user.taken_books_list:
+            if not taken_book.uuid:
+                continue
             col1, col2 = user_container.columns([3, 1])
             overdue_days = taken_book.overdue_days
             with col1:

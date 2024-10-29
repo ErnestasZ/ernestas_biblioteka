@@ -17,7 +17,18 @@ lib_db = BibliotekaDB()
 
 # lib_db.take_book('boook')
 
-lib_db.login_user('59864142')
+# lib_db.login_user('59864142')
+# print(lib_db.log_consumer)
+# for book in lib_db.log_consumer.taken_books_list:
+#     print('Knyga')
+#     if book:
+#         print('yra knyga')
+
+# print(len(lib_db.log_consumer))
+
+for book in lib_db.get_books():
+    print(book.title)
+
 # for book in lib_db.top_5_genre_by_user():
 #     print(book)
 

@@ -9,7 +9,7 @@ def create_login_user_data_DTO(query_results):
     books_list = []
     for res in query_results:
         taken_book = UserTakenBookDTO(**res)
-        if taken_book:
+        if taken_book.uuid:
             books_list.append(taken_book)
         login_user = LoginUserDataDTO(**res)
 

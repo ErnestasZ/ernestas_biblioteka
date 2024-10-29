@@ -25,10 +25,13 @@ class BibliotekaDB:
             c = conn.cursor()
             c.execute(login_q)
             log_uuid = c.fetchone()
-        if log_uuid['user_uuid']:
+        # print('login_user', log_uuid['user_uuid'])
+        if not log_uuid:
+            return
+        if log_uuid.get('user_uuid'):
             self.log_consumer = self.get_user_with_book(log_uuid['user_uuid'])
             return
-        if log_uuid['librarian_uuid']:
+        if log_uuid.get('librarian_uuid'):
             return
 
     def __check_default_librarian(self):
@@ -185,9 +188,9 @@ class BibliotekaDB:
                         from users u
                         Join consumers c on u.consumer_uuid = c.uuid
                         Join user_cards uc on u.card_uuid = uc.uuid
-                        Join user_records ur On u.uuid = ur.user_uuid
+                        Left Join user_records ur On u.uuid = ur.user_uuid
                             and return_at Is Null
-                        Join books b on ur.book_uuid = b.uuid
+                        Left Join books b on ur.book_uuid = b.uuid
                         Where u.uuid = %(user_uuid)s
                         """
         with pg_fn.db_connection() as conn:
@@ -217,10 +220,23 @@ class BibliotekaDB:
     #####
     # Just started, not finished
 
+    def logout(self) -> bool:
+        # self.log_consumer = None
+        clear_login = """TRUNCATE login RESTART IDENTITY"""
+
+        with pg_fn.db_connection() as conn:
+            c = conn.cursor()
+            # clear login table
+            c.execute(clear_login)
+
+        self.__get_login_consumer()
+        print('atsijungiai')
+        return True
+
     def login_user(self, card_number: int):
         # # from db
         # find user by card number
-        print('take_book')
+        # print('take_book')
         find_user_query = """Select 
                             u.uuid 
                             from users u
@@ -263,6 +279,7 @@ class BibliotekaDB:
             raise LookupError('Paimtos visos knygos')
         # check if user can take book by count +
         log_user = self.log_consumer
+        # print()
         if len(log_user) >= MAX_TAKEN_BOOKS:
             raise LookupError('Paemes max kieki knygų')
         # check if user can take book by is not overdue +
@@ -272,15 +289,50 @@ class BibliotekaDB:
                 # print(book.overdue_days)
                 if u_book == book:
                     raise LookupError('Jau turi tokia knyga paemes')
-                if u_book.overdue_days > 0:
+                if u_book.overdue_days and u_book.overdue_days > 0:
                     raise LookupError('Turi pradelstu grazinti knygu')
-        
 
         # new_user_record = set_take_book(self.log_consumer, book)
-        
-        # self.records.add_record(new_user_record)
-        # self.__save_lib()
-        # print("paemete knyga sekmingai")
+        user_record_query = """Insert Into user_records 
+                                (book_uuid, user_uuid)
+                                Values (%(book_uuid)s, %(user_uuid)s)"""
+
+        with pg_fn.db_connection() as conn:
+            c = conn.cursor()
+
+            # save to login table
+            c.execute(user_record_query, {
+                      'user_uuid': log_user.uuid, 'book_uuid': book.uuid})
+
+        # refresh log_user
+        self.__get_login_consumer()
+        print("paemete knyga sekmingai")
+
+    def return_book(self, book: UserTakenBookDTO) -> None:
+        self.__check_login_user()
+        # check if user has this book
+        if book not in self.log_consumer.taken_books_list:
+            raise LookupError('Neturi sios knygos')
+        # find book records
+        return_book_query = """Update user_records 
+                                set return_at = NOW()
+                                where book_uuid = %(book_uuid)s 
+                                and user_uuid = %(user_uuid)s
+                                and return_at is null"""
+
+        with pg_fn.db_connection() as conn:
+            c = conn.cursor()
+
+            # save to login table
+            c.execute(return_book_query, {
+                      'user_uuid': self.log_consumer.uuid, 'book_uuid': book.uuid})
+        # return book_records
+        # new_rec = fn.set_return_book(book_records)
+        # self.records.add_record(new_return_record)
+        # refresh log_user
+        self.__get_login_consumer()
+        print("paemete knyga sekmingai")
+        print("grazinote knyga")
 
     def add_book(self, author: str, name: str, release_year: str, genre: str, qty: str | int = 1):
         pass
