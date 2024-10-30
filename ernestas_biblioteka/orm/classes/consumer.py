@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Date, Float, Uuid, Boolean, ForeignKey, text, create_engine, and_, or_
+from sqlalchemy import Column, Integer, String, DateTime, Date, Float, Uuid, Boolean, ForeignKey, CheckConstraint, text, create_engine, and_, or_
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy.sql import text, exists
 from datetime import datetime
@@ -152,6 +152,24 @@ class UserRecord(Base):
         self.return_at = return_at
 
 
+class LibRecord(Base):
+    __tablename__ = 'lib_records'
+    uuid = Column(Uuid, primary_key=True,
+                  server_default=text("uuid_generate_v4()"))
+    type = Column(String(255), nullable=False)
+    __table_args__ = (
+        CheckConstraint("type IN ('add', 'remove')", name='check_action_type'),
+    )
+    action_date = Column(DateTime, default=datetime.now())
+    librarian_uuid = Column(Uuid, ForeignKey('librarians.uuid'))
+    book_uuid = Column(Uuid, ForeignKey('books.uuid'))
+    lib = relationship('Librarian', backref="lib_records")
+    book = relationship('Book', backref="lib_records")
+
+    def __init__(self, librarian_uuid, book_uuid, type='add'):
+        self.librarian_uuid = librarian_uuid
+        self.book_uuid = book_uuid
+        self.type = type
 # new_user = User(name="Alice", birth_year=1990, session=session)
 # session.add(new_user)
 # session.commit()
@@ -171,8 +189,14 @@ class UserRecord(Base):
 # session.commit()
 
 # session.close()
-all_taken_book = session.query(UserRecord).filter(
-    UserRecord.return_at.is_(None)).all()
+# all_taken_book = session.query(UserRecord).filter(
+#     UserRecord.return_at.is_(None)).all()
 
-for rec in all_taken_book:
-    print(rec.user.consumer.name, rec.book.title)
+# for rec in all_taken_book:
+#     print(rec.user.consumer.name, rec.book.title)
+
+all_added_books = session.query(LibRecord).filter(
+    LibRecord.type == 'add').all()
+
+for rec in all_added_books:
+    print(rec.lib.consumer.name, rec.book.title)
